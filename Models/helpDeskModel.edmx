@@ -1,0 +1,968 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="dbQuantusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="hdCLIENTE">
+          <Key>
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="RAZONSOCIAL" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="RFC" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="TELEFONO" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="DIASCREDITO" Type="int" />
+          <Property Name="ESTATUS" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="FECHAALTA" Type="date" />
+          <Property Name="FECHAMOD" Type="date" />
+        </EntityType>
+        <EntityType Name="hdDEPTO">
+          <Key>
+            <PropertyRef Name="IDDEPTO" />
+          </Key>
+          <Property Name="IDDEPTO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="NOMDEPTO" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdSLA">
+          <Key>
+            <PropertyRef Name="IDSLA" />
+          </Key>
+          <Property Name="IDSLA" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="IDPRIORIDAD" Type="int" Nullable="false" />
+          <Property Name="RESPONDEREN" Type="int" Nullable="false" />
+          <Property Name="RESOLVEREN" Type="int" Nullable="false" />
+          <Property Name="ESTATUS" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdSUCURSAL">
+          <Key>
+            <PropertyRef Name="IDSUCURSAL" />
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDSUCURSAL" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="NOMSUCRUSAL" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdTICKET">
+          <Key>
+            <PropertyRef Name="IDTICKET" />
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDTICKET" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="IDTIPO" Type="int" Nullable="false" />
+          <Property Name="IDUSUARIO" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ASUNTO" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DESCTICKET" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ESTATUS" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="ASIGNADOA" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IDPRIORIDAD" Type="int" Nullable="false" />
+          <Property Name="ORIGEN" Type="int" Nullable="false" />
+          <Property Name="FECHA" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdTICKETDET">
+          <Key>
+            <PropertyRef Name="IDTICKETDET" />
+          </Key>
+          <Property Name="IDTICKETDET" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDTICKET" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="IDUSUARIO" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DESCTICKETDET" Type="varchar" MaxLength="100" />
+          <Property Name="FECHA" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdTICKETDETFILE">
+          <Key>
+            <PropertyRef Name="IDTICKETDETFILE" />
+          </Key>
+          <Property Name="IDTICKETDETFILE" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDTICKET" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="NOMARCHIVO" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="OBJARCHIVO" Type="varchar(max)" Nullable="false" />
+          <Property Name="FECHA" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdTICKETFILE">
+          <Key>
+            <PropertyRef Name="IDTICKETFILE" />
+          </Key>
+          <Property Name="IDTICKETFILE" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDTICKET" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="NOMARCHIVO" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="OBJARCHIVO" Type="varchar(max)" Nullable="false" />
+          <Property Name="FECHA" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdTICKETTASK">
+          <Key>
+            <PropertyRef Name="IDTASK" />
+            <PropertyRef Name="IDTICKET" />
+          </Key>
+          <Property Name="IDTASK" Type="int" Nullable="false" />
+          <Property Name="IDTICKET" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="NOMTASK" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="DESCTASK" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ESTATUS" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="FECHA" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdTIPO">
+          <Key>
+            <PropertyRef Name="IDTIPO" />
+          </Key>
+          <Property Name="IDTIPO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="NOMTIPO" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdUSUARIO">
+          <Key>
+            <PropertyRef Name="IDUSUARIO" />
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDUSUARIO" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="IDSUCURSAL" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IDDEPTO" Type="int" Nullable="false" />
+          <Property Name="NOMUSUARIO" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="TELEFONO" Type="varchar" MaxLength="60" />
+          <Property Name="PASSW" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ROL" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="ESTATUS" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="FECHAALTA" Type="date" />
+          <Property Name="FECHAMOD" Type="date" />
+        </EntityType>
+        <Association Name="FK_hdDEPTO_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdDEPTO">
+              <PropertyRef Name="IDDEPTO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdSLA_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdSLA" Type="Self.hdSLA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdSLA">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKET_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKET_hdTIPO">
+          <End Role="hdTIPO" Type="Self.hdTIPO" Multiplicity="1" />
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTIPO">
+              <PropertyRef Name="IDTIPO" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="IDTIPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKET_hdUSUARIO">
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="1" />
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdUSUARIO">
+              <PropertyRef Name="IDUSUARIO" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="IDUSUARIO" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETDET_TICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETDET" Type="Self.hdTICKETDET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETDET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETDETFILE_TICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETDETFILE" Type="Self.hdTICKETDETFILE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETDETFILE">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETFILE_TICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETFILE" Type="Self.hdTICKETFILE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETFILE">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETTASK_hdTICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETTASK" Type="Self.hdTICKETTASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETTASK">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTIPO_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdTIPO" Type="Self.hdTIPO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTIPO">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdUSARIO_hdSUCURSAL">
+          <End Role="hdSUCURSAL" Type="Self.hdSUCURSAL" Multiplicity="1" />
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdSUCURSAL">
+              <PropertyRef Name="IDSUCURSAL" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdUSUARIO">
+              <PropertyRef Name="IDSUCURSAL" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdUSUARIO_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdUSUARIO">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdUSUARIO_hdDEPTO">
+          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="1" />
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdDEPTO">
+              <PropertyRef Name="IDDEPTO" />
+            </Principal>
+            <Dependent Role="hdUSUARIO">
+              <PropertyRef Name="IDDEPTO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_heSUCURSAL_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdSUCURSAL" Type="Self.hdSUCURSAL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdSUCURSAL">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbQuantusModelStoreContainer">
+          <EntitySet Name="hdCLIENTE" EntityType="Self.hdCLIENTE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdDEPTO" EntityType="Self.hdDEPTO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdSLA" EntityType="Self.hdSLA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdSUCURSAL" EntityType="Self.hdSUCURSAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdTICKET" EntityType="Self.hdTICKET" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdTICKETDET" EntityType="Self.hdTICKETDET" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdTICKETDETFILE" EntityType="Self.hdTICKETDETFILE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdTICKETFILE" EntityType="Self.hdTICKETFILE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdTICKETTASK" EntityType="Self.hdTICKETTASK" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdTIPO" EntityType="Self.hdTIPO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdUSUARIO" EntityType="Self.hdUSUARIO" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_hdDEPTO_hdCLIENTE" Association="Self.FK_hdDEPTO_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdDEPTO" EntitySet="hdDEPTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdSLA_hdCLIENTE" Association="Self.FK_hdSLA_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdSLA" EntitySet="hdSLA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKET_hdCLIENTE" Association="Self.FK_hdTICKET_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKET_hdTIPO" Association="Self.FK_hdTICKET_hdTIPO">
+            <End Role="hdTIPO" EntitySet="hdTIPO" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKET_hdUSUARIO" Association="Self.FK_hdTICKET_hdUSUARIO">
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETDET_TICKET" Association="Self.FK_hdTICKETDET_TICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETDET" EntitySet="hdTICKETDET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETDETFILE_TICKET" Association="Self.FK_hdTICKETDETFILE_TICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETDETFILE" EntitySet="hdTICKETDETFILE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETFILE_TICKET" Association="Self.FK_hdTICKETFILE_TICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETFILE" EntitySet="hdTICKETFILE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETTASK_hdTICKET" Association="Self.FK_hdTICKETTASK_hdTICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETTASK" EntitySet="hdTICKETTASK" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTIPO_hdCLIENTE" Association="Self.FK_hdTIPO_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdTIPO" EntitySet="hdTIPO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdUSARIO_hdSUCURSAL" Association="Self.FK_hdUSARIO_hdSUCURSAL">
+            <End Role="hdSUCURSAL" EntitySet="hdSUCURSAL" />
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdUSUARIO_hdCLIENTE" Association="Self.FK_hdUSUARIO_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdUSUARIO_hdDEPTO" Association="Self.FK_hdUSUARIO_hdDEPTO">
+            <End Role="hdDEPTO" EntitySet="hdDEPTO" />
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_heSUCURSAL_hdCLIENTE" Association="Self.FK_heSUCURSAL_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdSUCURSAL" EntitySet="hdSUCURSAL" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbQuantusModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="hdCLIENTE">
+          <Key>
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="RAZONSOCIAL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RFC" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TELEFONO" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DIASCREDITO" Type="Int32" />
+          <Property Name="ESTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FECHAALTA" Type="DateTime" Precision="0" />
+          <Property Name="FECHAMOD" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="hdDEPTO" Relationship="Self.FK_hdDEPTO_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdDEPTO" />
+          <NavigationProperty Name="hdSLA" Relationship="Self.FK_hdSLA_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdSLA" />
+          <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKET_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdTICKET" />
+          <NavigationProperty Name="hdTIPO" Relationship="Self.FK_hdTIPO_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdTIPO" />
+          <NavigationProperty Name="hdUSUARIO" Relationship="Self.FK_hdUSUARIO_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdUSUARIO" />
+          <NavigationProperty Name="hdSUCURSAL" Relationship="Self.FK_heSUCURSAL_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdSUCURSAL" />
+        </EntityType>
+        <EntityType Name="hdDEPTO">
+          <Key>
+            <PropertyRef Name="IDDEPTO" />
+          </Key>
+          <Property Name="IDDEPTO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="NOMDEPTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="hdCLIENTE" Relationship="Self.FK_hdDEPTO_hdCLIENTE" FromRole="hdDEPTO" ToRole="hdCLIENTE" />
+          <NavigationProperty Name="hdUSUARIO" Relationship="Self.FK_hdUSUARIO_hdDEPTO" FromRole="hdDEPTO" ToRole="hdUSUARIO" />
+        </EntityType>
+        <EntityType Name="hdSLA">
+          <Key>
+            <PropertyRef Name="IDSLA" />
+          </Key>
+          <Property Name="IDSLA" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="IDPRIORIDAD" Type="Int32" Nullable="false" />
+          <Property Name="RESPONDEREN" Type="Int32" Nullable="false" />
+          <Property Name="RESOLVEREN" Type="Int32" Nullable="false" />
+          <Property Name="ESTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="hdCLIENTE" Relationship="Self.FK_hdSLA_hdCLIENTE" FromRole="hdSLA" ToRole="hdCLIENTE" />
+        </EntityType>
+        <EntityType Name="hdSUCURSAL">
+          <Key>
+            <PropertyRef Name="IDSUCURSAL" />
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDSUCURSAL" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="NOMSUCRUSAL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="hdCLIENTE" Relationship="Self.FK_heSUCURSAL_hdCLIENTE" FromRole="hdSUCURSAL" ToRole="hdCLIENTE" />
+          <NavigationProperty Name="hdUSUARIO" Relationship="Self.FK_hdUSARIO_hdSUCURSAL" FromRole="hdSUCURSAL" ToRole="hdUSUARIO" />
+        </EntityType>
+        <EntityType Name="hdTICKET">
+          <Key>
+            <PropertyRef Name="IDTICKET" />
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDTICKET" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="IDTIPO" Type="Int32" Nullable="false" />
+          <Property Name="IDUSUARIO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ASUNTO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DESCTICKET" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ESTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ASIGNADOA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDPRIORIDAD" Type="Int32" Nullable="false" />
+          <Property Name="ORIGEN" Type="Int32" Nullable="false" />
+          <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="hdCLIENTE" Relationship="Self.FK_hdTICKET_hdCLIENTE" FromRole="hdTICKET" ToRole="hdCLIENTE" />
+          <NavigationProperty Name="hdTIPO" Relationship="Self.FK_hdTICKET_hdTIPO" FromRole="hdTICKET" ToRole="hdTIPO" />
+          <NavigationProperty Name="hdUSUARIO" Relationship="Self.FK_hdTICKET_hdUSUARIO" FromRole="hdTICKET" ToRole="hdUSUARIO" />
+          <NavigationProperty Name="hdTICKETDET" Relationship="Self.FK_hdTICKETDET_TICKET" FromRole="hdTICKET" ToRole="hdTICKETDET" />
+          <NavigationProperty Name="hdTICKETDETFILE" Relationship="Self.FK_hdTICKETDETFILE_TICKET" FromRole="hdTICKET" ToRole="hdTICKETDETFILE" />
+          <NavigationProperty Name="hdTICKETFILE" Relationship="Self.FK_hdTICKETFILE_TICKET" FromRole="hdTICKET" ToRole="hdTICKETFILE" />
+          <NavigationProperty Name="hdTICKETTASK" Relationship="Self.FK_hdTICKETTASK_hdTICKET" FromRole="hdTICKET" ToRole="hdTICKETTASK" />
+        </EntityType>
+        <EntityType Name="hdTICKETDET">
+          <Key>
+            <PropertyRef Name="IDTICKETDET" />
+          </Key>
+          <Property Name="IDTICKETDET" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDTICKET" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="IDUSUARIO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DESCTICKETDET" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKETDET_TICKET" FromRole="hdTICKETDET" ToRole="hdTICKET" />
+        </EntityType>
+        <EntityType Name="hdTICKETDETFILE">
+          <Key>
+            <PropertyRef Name="IDTICKETDETFILE" />
+          </Key>
+          <Property Name="IDTICKETDETFILE" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDTICKET" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="NOMARCHIVO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OBJARCHIVO" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKETDETFILE_TICKET" FromRole="hdTICKETDETFILE" ToRole="hdTICKET" />
+        </EntityType>
+        <EntityType Name="hdTICKETFILE">
+          <Key>
+            <PropertyRef Name="IDTICKETFILE" />
+          </Key>
+          <Property Name="IDTICKETFILE" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDTICKET" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="NOMARCHIVO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OBJARCHIVO" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKETFILE_TICKET" FromRole="hdTICKETFILE" ToRole="hdTICKET" />
+        </EntityType>
+        <EntityType Name="hdTICKETTASK">
+          <Key>
+            <PropertyRef Name="IDTASK" />
+            <PropertyRef Name="IDTICKET" />
+          </Key>
+          <Property Name="IDTASK" Type="Int32" Nullable="false" />
+          <Property Name="IDTICKET" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="NOMTASK" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DESCTASK" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ESTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKETTASK_hdTICKET" FromRole="hdTICKETTASK" ToRole="hdTICKET" />
+        </EntityType>
+        <EntityType Name="hdTIPO">
+          <Key>
+            <PropertyRef Name="IDTIPO" />
+          </Key>
+          <Property Name="IDTIPO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="NOMTIPO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="hdCLIENTE" Relationship="Self.FK_hdTIPO_hdCLIENTE" FromRole="hdTIPO" ToRole="hdCLIENTE" />
+          <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKET_hdTIPO" FromRole="hdTIPO" ToRole="hdTICKET" />
+        </EntityType>
+        <EntityType Name="hdUSUARIO">
+          <Key>
+            <PropertyRef Name="IDUSUARIO" />
+            <PropertyRef Name="IDCLIENTE" />
+          </Key>
+          <Property Name="IDUSUARIO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="IDSUCURSAL" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDDEPTO" Type="Int32" Nullable="false" />
+          <Property Name="NOMUSUARIO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TELEFONO" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="PASSW" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ROL" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ESTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FECHAALTA" Type="DateTime" Precision="0" />
+          <Property Name="FECHAMOD" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="hdCLIENTE" Relationship="Self.FK_hdUSUARIO_hdCLIENTE" FromRole="hdUSUARIO" ToRole="hdCLIENTE" />
+          <NavigationProperty Name="hdDEPTO" Relationship="Self.FK_hdUSUARIO_hdDEPTO" FromRole="hdUSUARIO" ToRole="hdDEPTO" />
+          <NavigationProperty Name="hdSUCURSAL" Relationship="Self.FK_hdUSARIO_hdSUCURSAL" FromRole="hdUSUARIO" ToRole="hdSUCURSAL" />
+          <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKET_hdUSUARIO" FromRole="hdUSUARIO" ToRole="hdTICKET" />
+        </EntityType>
+        <Association Name="FK_hdDEPTO_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdDEPTO">
+              <PropertyRef Name="IDDEPTO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdSLA_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdSLA" Type="Self.hdSLA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdSLA">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKET_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTIPO_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdTIPO" Type="Self.hdTIPO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTIPO">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdUSUARIO_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdUSUARIO">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_heSUCURSAL_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdSUCURSAL" Type="Self.hdSUCURSAL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdSUCURSAL">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdUSUARIO_hdDEPTO">
+          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="1" />
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdDEPTO">
+              <PropertyRef Name="IDDEPTO" />
+            </Principal>
+            <Dependent Role="hdUSUARIO">
+              <PropertyRef Name="IDDEPTO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdUSARIO_hdSUCURSAL">
+          <End Role="hdSUCURSAL" Type="Self.hdSUCURSAL" Multiplicity="1" />
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdSUCURSAL">
+              <PropertyRef Name="IDSUCURSAL" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdUSUARIO">
+              <PropertyRef Name="IDSUCURSAL" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKET_hdTIPO">
+          <End Role="hdTIPO" Type="Self.hdTIPO" Multiplicity="1" />
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTIPO">
+              <PropertyRef Name="IDTIPO" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="IDTIPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKET_hdUSUARIO">
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="1" />
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdUSUARIO">
+              <PropertyRef Name="IDUSUARIO" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="IDUSUARIO" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETDET_TICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETDET" Type="Self.hdTICKETDET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETDET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETDETFILE_TICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETDETFILE" Type="Self.hdTICKETDETFILE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETDETFILE">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETFILE_TICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETFILE" Type="Self.hdTICKETFILE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETFILE">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETTASK_hdTICKET">
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="1" />
+          <End Role="hdTICKETTASK" Type="Self.hdTICKETTASK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdTICKET">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKETTASK">
+              <PropertyRef Name="IDTICKET" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbHelpDesk" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="hdCLIENTE" EntityType="Self.hdCLIENTE" />
+          <EntitySet Name="hdDEPTO" EntityType="Self.hdDEPTO" />
+          <EntitySet Name="hdSLA" EntityType="Self.hdSLA" />
+          <EntitySet Name="hdSUCURSAL" EntityType="Self.hdSUCURSAL" />
+          <EntitySet Name="hdTICKET" EntityType="Self.hdTICKET" />
+          <EntitySet Name="hdTICKETDET" EntityType="Self.hdTICKETDET" />
+          <EntitySet Name="hdTICKETDETFILE" EntityType="Self.hdTICKETDETFILE" />
+          <EntitySet Name="hdTICKETFILE" EntityType="Self.hdTICKETFILE" />
+          <EntitySet Name="hdTICKETTASK" EntityType="Self.hdTICKETTASK" />
+          <EntitySet Name="hdTIPO" EntityType="Self.hdTIPO" />
+          <EntitySet Name="hdUSUARIO" EntityType="Self.hdUSUARIO" />
+          <AssociationSet Name="FK_hdDEPTO_hdCLIENTE" Association="Self.FK_hdDEPTO_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdDEPTO" EntitySet="hdDEPTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdSLA_hdCLIENTE" Association="Self.FK_hdSLA_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdSLA" EntitySet="hdSLA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKET_hdCLIENTE" Association="Self.FK_hdTICKET_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTIPO_hdCLIENTE" Association="Self.FK_hdTIPO_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdTIPO" EntitySet="hdTIPO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdUSUARIO_hdCLIENTE" Association="Self.FK_hdUSUARIO_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_heSUCURSAL_hdCLIENTE" Association="Self.FK_heSUCURSAL_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdSUCURSAL" EntitySet="hdSUCURSAL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdUSUARIO_hdDEPTO" Association="Self.FK_hdUSUARIO_hdDEPTO">
+            <End Role="hdDEPTO" EntitySet="hdDEPTO" />
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdUSARIO_hdSUCURSAL" Association="Self.FK_hdUSARIO_hdSUCURSAL">
+            <End Role="hdSUCURSAL" EntitySet="hdSUCURSAL" />
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKET_hdTIPO" Association="Self.FK_hdTICKET_hdTIPO">
+            <End Role="hdTIPO" EntitySet="hdTIPO" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKET_hdUSUARIO" Association="Self.FK_hdTICKET_hdUSUARIO">
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETDET_TICKET" Association="Self.FK_hdTICKETDET_TICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETDET" EntitySet="hdTICKETDET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETDETFILE_TICKET" Association="Self.FK_hdTICKETDETFILE_TICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETDETFILE" EntitySet="hdTICKETDETFILE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETFILE_TICKET" Association="Self.FK_hdTICKETFILE_TICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETFILE" EntitySet="hdTICKETFILE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETTASK_hdTICKET" Association="Self.FK_hdTICKETTASK_hdTICKET">
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+            <End Role="hdTICKETTASK" EntitySet="hdTICKETTASK" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbQuantusModelStoreContainer" CdmEntityContainer="dbHelpDesk">
+          <EntitySetMapping Name="hdCLIENTE">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdCLIENTE">
+              <MappingFragment StoreEntitySet="hdCLIENTE">
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="RAZONSOCIAL" ColumnName="RAZONSOCIAL" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="DIASCREDITO" ColumnName="DIASCREDITO" />
+                <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
+                <ScalarProperty Name="FECHAALTA" ColumnName="FECHAALTA" />
+                <ScalarProperty Name="FECHAMOD" ColumnName="FECHAMOD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdDEPTO">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdDEPTO">
+              <MappingFragment StoreEntitySet="hdDEPTO">
+                <ScalarProperty Name="IDDEPTO" ColumnName="IDDEPTO" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="NOMDEPTO" ColumnName="NOMDEPTO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdSLA">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdSLA">
+              <MappingFragment StoreEntitySet="hdSLA">
+                <ScalarProperty Name="IDSLA" ColumnName="IDSLA" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="IDPRIORIDAD" ColumnName="IDPRIORIDAD" />
+                <ScalarProperty Name="RESPONDEREN" ColumnName="RESPONDEREN" />
+                <ScalarProperty Name="RESOLVEREN" ColumnName="RESOLVEREN" />
+                <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdSUCURSAL">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdSUCURSAL">
+              <MappingFragment StoreEntitySet="hdSUCURSAL">
+                <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="NOMSUCRUSAL" ColumnName="NOMSUCRUSAL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdTICKET">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdTICKET">
+              <MappingFragment StoreEntitySet="hdTICKET">
+                <ScalarProperty Name="IDTICKET" ColumnName="IDTICKET" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="IDTIPO" ColumnName="IDTIPO" />
+                <ScalarProperty Name="IDUSUARIO" ColumnName="IDUSUARIO" />
+                <ScalarProperty Name="ASUNTO" ColumnName="ASUNTO" />
+                <ScalarProperty Name="DESCTICKET" ColumnName="DESCTICKET" />
+                <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
+                <ScalarProperty Name="ASIGNADOA" ColumnName="ASIGNADOA" />
+                <ScalarProperty Name="IDPRIORIDAD" ColumnName="IDPRIORIDAD" />
+                <ScalarProperty Name="ORIGEN" ColumnName="ORIGEN" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdTICKETDET">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdTICKETDET">
+              <MappingFragment StoreEntitySet="hdTICKETDET">
+                <ScalarProperty Name="IDTICKETDET" ColumnName="IDTICKETDET" />
+                <ScalarProperty Name="IDTICKET" ColumnName="IDTICKET" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="IDUSUARIO" ColumnName="IDUSUARIO" />
+                <ScalarProperty Name="DESCTICKETDET" ColumnName="DESCTICKETDET" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdTICKETDETFILE">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdTICKETDETFILE">
+              <MappingFragment StoreEntitySet="hdTICKETDETFILE">
+                <ScalarProperty Name="IDTICKETDETFILE" ColumnName="IDTICKETDETFILE" />
+                <ScalarProperty Name="IDTICKET" ColumnName="IDTICKET" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="NOMARCHIVO" ColumnName="NOMARCHIVO" />
+                <ScalarProperty Name="OBJARCHIVO" ColumnName="OBJARCHIVO" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdTICKETFILE">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdTICKETFILE">
+              <MappingFragment StoreEntitySet="hdTICKETFILE">
+                <ScalarProperty Name="IDTICKETFILE" ColumnName="IDTICKETFILE" />
+                <ScalarProperty Name="IDTICKET" ColumnName="IDTICKET" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="NOMARCHIVO" ColumnName="NOMARCHIVO" />
+                <ScalarProperty Name="OBJARCHIVO" ColumnName="OBJARCHIVO" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdTICKETTASK">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdTICKETTASK">
+              <MappingFragment StoreEntitySet="hdTICKETTASK">
+                <ScalarProperty Name="IDTASK" ColumnName="IDTASK" />
+                <ScalarProperty Name="IDTICKET" ColumnName="IDTICKET" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="NOMTASK" ColumnName="NOMTASK" />
+                <ScalarProperty Name="DESCTASK" ColumnName="DESCTASK" />
+                <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdTIPO">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdTIPO">
+              <MappingFragment StoreEntitySet="hdTIPO">
+                <ScalarProperty Name="IDTIPO" ColumnName="IDTIPO" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="NOMTIPO" ColumnName="NOMTIPO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdUSUARIO">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdUSUARIO">
+              <MappingFragment StoreEntitySet="hdUSUARIO">
+                <ScalarProperty Name="IDUSUARIO" ColumnName="IDUSUARIO" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
+                <ScalarProperty Name="IDDEPTO" ColumnName="IDDEPTO" />
+                <ScalarProperty Name="NOMUSUARIO" ColumnName="NOMUSUARIO" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+                <ScalarProperty Name="PASSW" ColumnName="PASSW" />
+                <ScalarProperty Name="ROL" ColumnName="ROL" />
+                <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
+                <ScalarProperty Name="FECHAALTA" ColumnName="FECHAALTA" />
+                <ScalarProperty Name="FECHAMOD" ColumnName="FECHAMOD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
