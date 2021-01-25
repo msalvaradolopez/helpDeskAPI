@@ -22,7 +22,7 @@ namespace helpDeskAPI.Models
     
         public string IDSUCURSAL { get; set; }
         public int IDCLIENTE { get; set; }
-        public string NOMSUCRUSAL { get; set; }
+        public string NOMSUCURSAL { get; set; }
     
         public virtual hdCLIENTE hdCLIENTE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

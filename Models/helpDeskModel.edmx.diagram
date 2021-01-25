@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5e1a8602beb64aa398b7c4121b583f3f" Name="Diagram1">
+      <Diagram DiagramId="309033b30c5f493199e2dd5b641e7c31" Name="Diagram1">
         <EntityTypeShape EntityType="dbQuantusModel.hdCLIENTE" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
         <EntityTypeShape EntityType="dbQuantusModel.hdDEPTO" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="dbQuantusModel.hdSLA" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />

@@ -45,7 +45,7 @@
           </Key>
           <Property Name="IDSUCURSAL" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="IDCLIENTE" Type="int" Nullable="false" />
-          <Property Name="NOMSUCRUSAL" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="NOMSUCURSAL" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="hdTICKET">
           <Key>
@@ -138,13 +138,13 @@
         </EntityType>
         <Association Name="FK_hdDEPTO_hdCLIENTE">
           <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
-          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="0..1" />
+          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="hdCLIENTE">
               <PropertyRef Name="IDCLIENTE" />
             </Principal>
             <Dependent Role="hdDEPTO">
-              <PropertyRef Name="IDDEPTO" />
+              <PropertyRef Name="IDCLIENTE" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -439,7 +439,7 @@
           </Key>
           <Property Name="IDSUCURSAL" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
-          <Property Name="NOMSUCRUSAL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOMSUCURSAL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="hdCLIENTE" Relationship="Self.FK_heSUCURSAL_hdCLIENTE" FromRole="hdSUCURSAL" ToRole="hdCLIENTE" />
           <NavigationProperty Name="hdUSUARIO" Relationship="Self.FK_hdUSARIO_hdSUCURSAL" FromRole="hdSUCURSAL" ToRole="hdUSUARIO" />
         </EntityType>
@@ -551,13 +551,13 @@
         </EntityType>
         <Association Name="FK_hdDEPTO_hdCLIENTE">
           <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
-          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="0..1" />
+          <End Role="hdDEPTO" Type="Self.hdDEPTO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="hdCLIENTE">
               <PropertyRef Name="IDCLIENTE" />
             </Principal>
             <Dependent Role="hdDEPTO">
-              <PropertyRef Name="IDDEPTO" />
+              <PropertyRef Name="IDCLIENTE" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -729,7 +729,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="dbHelpDesk" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="dbQuantusEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="hdCLIENTE" EntityType="Self.hdCLIENTE" />
           <EntitySet Name="hdDEPTO" EntityType="Self.hdDEPTO" />
           <EntitySet Name="hdSLA" EntityType="Self.hdSLA" />
@@ -803,7 +803,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="dbQuantusModelStoreContainer" CdmEntityContainer="dbHelpDesk">
+        <EntityContainerMapping StorageEntityContainer="dbQuantusModelStoreContainer" CdmEntityContainer="dbQuantusEntities">
           <EntitySetMapping Name="hdCLIENTE">
             <EntityTypeMapping TypeName="dbQuantusModel.hdCLIENTE">
               <MappingFragment StoreEntitySet="hdCLIENTE">
@@ -845,7 +845,7 @@
               <MappingFragment StoreEntitySet="hdSUCURSAL">
                 <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
                 <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
-                <ScalarProperty Name="NOMSUCRUSAL" ColumnName="NOMSUCRUSAL" />
+                <ScalarProperty Name="NOMSUCURSAL" ColumnName="NOMSUCURSAL" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

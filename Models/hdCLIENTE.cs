@@ -17,6 +17,7 @@ namespace helpDeskAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public hdCLIENTE()
         {
+            this.hdDEPTO = new HashSet<hdDEPTO>();
             this.hdSLA = new HashSet<hdSLA>();
             this.hdTICKET = new HashSet<hdTICKET>();
             this.hdTIPO = new HashSet<hdTIPO>();
@@ -34,7 +35,8 @@ namespace helpDeskAPI.Models
         public Nullable<System.DateTime> FECHAALTA { get; set; }
         public Nullable<System.DateTime> FECHAMOD { get; set; }
     
-        public virtual hdDEPTO hdDEPTO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<hdDEPTO> hdDEPTO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hdSLA> hdSLA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

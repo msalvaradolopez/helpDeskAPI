@@ -13,10 +13,10 @@ namespace helpDeskAPI.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class dbHelpDesk : DbContext
+    public partial class dbQuantusEntities : DbContext
     {
-        public dbHelpDesk()
-            : base("name=dbHelpDesk")
+        public dbQuantusEntities()
+            : base("name=dbQuantusEntities")
         {
         }
     
