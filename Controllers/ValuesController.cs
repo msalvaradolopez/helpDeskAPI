@@ -300,7 +300,7 @@ namespace helpDeskAPI.Controllers
 
                     var _deptos = db.hdDEPTO
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDDEPTO.ToString() == _valor)
-                        .Select(x => new { x.IDDEPTO, x.NOMDEPTO})
+                        .Select(x => new { x.IDDEPTO, x.IDCLIENTE, x.NOMDEPTO})
                         .FirstOrDefault();
 
                     return _deptos;
@@ -425,7 +425,7 @@ namespace helpDeskAPI.Controllers
 
                     var _usarios = db.hdUSUARIO
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente && (x.NOMUSUARIO.Contains(_valor) || _valor == "0"))
-                        .Select(x => new {x.IDUSUARIO, x.IDCLIENTE, x.IDSUCURSAL , x.IDDEPTO, x.NOMUSUARIO, x.EMAIL, x.TELEFONO, x.PASSW, x.ROL, x.ESTATUS })
+                        .Select(x => new {x.IDUSUARIO, x.IDCLIENTE, x.hdSUCURSAL.NOMSUCURSAL, x.hdDEPTO.NOMDEPTO, x.NOMUSUARIO, x.EMAIL, x.TELEFONO, x.PASSW, x.ROL, x.ESTATUS })
                         .ToList();
 
                     /*
@@ -633,7 +633,7 @@ namespace helpDeskAPI.Controllers
 
                     var _tipo = db.hdTIPO
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDTIPO.ToString() == _valor)
-                        .Select(x => new { x.IDTIPO, x.NOMTIPO })
+                        .Select(x => new { x.IDTIPO, x.IDCLIENTE, x.NOMTIPO })
                         .FirstOrDefault();
 
                     return _tipo;
@@ -758,7 +758,7 @@ namespace helpDeskAPI.Controllers
 
                     var _slas = db.hdSLA
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente)
-                        .Select(x => new { x.IDSLA, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
+                        .Select(x => new { x.IDSLA, x.IDCLIENTE, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
                         .ToList();
 
                     /*
@@ -796,7 +796,7 @@ namespace helpDeskAPI.Controllers
 
                     var _sla = db.hdSLA
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDSLA.ToString() == _valor)
-                        .Select(x => new { x.IDSLA, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
+                        .Select(x => new { x.IDSLA, x.IDCLIENTE, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
                         .FirstOrDefault();
 
                     return _sla;
