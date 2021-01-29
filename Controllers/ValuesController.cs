@@ -863,6 +863,7 @@ namespace helpDeskAPI.Controllers
 
                     _sla.RESPONDEREN = oSLA.RESPONDEREN;
                     _sla.RESOLVEREN = oSLA.RESOLVEREN;
+                    _sla.ESTATUS = oSLA.ESTATUS;
                     db.SaveChanges();
 
                     return "Registro actualizado ok.";
