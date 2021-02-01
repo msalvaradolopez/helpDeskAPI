@@ -179,6 +179,9 @@
     <Compile Include="Models\hdDEPTO.cs">
       <DependentUpon>helpDeskModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\hdPARAM.cs">
+      <DependentUpon>helpDeskModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\hdSLA.cs">
       <DependentUpon>helpDeskModel.tt</DependentUpon>
     </Compile>

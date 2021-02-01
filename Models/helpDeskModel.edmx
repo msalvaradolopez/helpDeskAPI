@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="dbQuantusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="dbQuantusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="hdCLIENTE">
           <Key>
             <PropertyRef Name="IDCLIENTE" />
@@ -26,6 +26,15 @@
           <Property Name="IDDEPTO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDCLIENTE" Type="int" Nullable="false" />
           <Property Name="NOMDEPTO" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hdPARAM">
+          <Key>
+            <PropertyRef Name="IDPARAM" />
+          </Key>
+          <Property Name="IDPARAM" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IDCLIENTE" Type="int" Nullable="false" />
+          <Property Name="DESCPARAM" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="VALOR" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="hdSLA">
           <Key>
@@ -59,10 +68,10 @@
           <Property Name="ASUNTO" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="DESCTICKET" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="ESTATUS" Type="char" MaxLength="1" Nullable="false" />
-          <Property Name="ASIGNADOA" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="IDPRIORIDAD" Type="int" Nullable="false" />
           <Property Name="ORIGEN" Type="int" Nullable="false" />
           <Property Name="FECHA" Type="date" Nullable="false" />
+          <Property Name="ASIGNADOA" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="hdTICKETDET">
           <Key>
@@ -148,6 +157,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_hdPARAM_hdCLIENTE">
+          <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
+          <End Role="hdPARAM" Type="Self.hdPARAM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdPARAM">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_hdSLA_hdCLIENTE">
           <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
           <End Role="hdSLA" Type="Self.hdSLA" Multiplicity="*" />
@@ -194,6 +215,20 @@
             </Principal>
             <Dependent Role="hdTICKET">
               <PropertyRef Name="IDUSUARIO" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETasignado_hdUSUARIO">
+          <End Role="hdUSUARIO" Type="Self.hdUSUARIO" Multiplicity="0..1" />
+          <End Role="hdTICKET" Type="Self.hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdUSUARIO">
+              <PropertyRef Name="IDUSUARIO" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="ASIGNADOA" />
               <PropertyRef Name="IDCLIENTE" />
             </Dependent>
           </ReferentialConstraint>
@@ -319,6 +354,7 @@
         <EntityContainer Name="dbQuantusModelStoreContainer">
           <EntitySet Name="hdCLIENTE" EntityType="Self.hdCLIENTE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hdDEPTO" EntityType="Self.hdDEPTO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hdPARAM" EntityType="Self.hdPARAM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hdSLA" EntityType="Self.hdSLA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hdSUCURSAL" EntityType="Self.hdSUCURSAL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hdTICKET" EntityType="Self.hdTICKET" Schema="dbo" store:Type="Tables" />
@@ -331,6 +367,10 @@
           <AssociationSet Name="FK_hdDEPTO_hdCLIENTE" Association="Self.FK_hdDEPTO_hdCLIENTE">
             <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
             <End Role="hdDEPTO" EntitySet="hdDEPTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdPARAM_hdCLIENTE" Association="Self.FK_hdPARAM_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdPARAM" EntitySet="hdPARAM" />
           </AssociationSet>
           <AssociationSet Name="FK_hdSLA_hdCLIENTE" Association="Self.FK_hdSLA_hdCLIENTE">
             <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
@@ -345,6 +385,10 @@
             <End Role="hdTICKET" EntitySet="hdTICKET" />
           </AssociationSet>
           <AssociationSet Name="FK_hdTICKET_hdUSUARIO" Association="Self.FK_hdTICKET_hdUSUARIO">
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETasignado_hdUSUARIO" Association="Self.FK_hdTICKETasignado_hdUSUARIO">
             <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
             <End Role="hdTICKET" EntitySet="hdTICKET" />
           </AssociationSet>
@@ -385,8 +429,7 @@
             <End Role="hdSUCURSAL" EntitySet="hdSUCURSAL" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbQuantusModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -409,6 +452,7 @@
           <NavigationProperty Name="hdTIPO" Relationship="Self.FK_hdTIPO_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdTIPO" />
           <NavigationProperty Name="hdUSUARIO" Relationship="Self.FK_hdUSUARIO_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdUSUARIO" />
           <NavigationProperty Name="hdSUCURSAL" Relationship="Self.FK_heSUCURSAL_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdSUCURSAL" />
+          <NavigationProperty Name="hdPARAM" Relationship="dbQuantusModel.FK_hdPARAM_hdCLIENTE" FromRole="hdCLIENTE" ToRole="hdPARAM" />
         </EntityType>
         <EntityType Name="hdDEPTO">
           <Key>
@@ -455,7 +499,7 @@
           <Property Name="ASUNTO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DESCTICKET" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ESTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="ASIGNADOA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ASIGNADOA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IDPRIORIDAD" Type="Int32" Nullable="false" />
           <Property Name="ORIGEN" Type="Int32" Nullable="false" />
           <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
@@ -466,6 +510,7 @@
           <NavigationProperty Name="hdTICKETDETFILE" Relationship="Self.FK_hdTICKETDETFILE_TICKET" FromRole="hdTICKET" ToRole="hdTICKETDETFILE" />
           <NavigationProperty Name="hdTICKETFILE" Relationship="Self.FK_hdTICKETFILE_TICKET" FromRole="hdTICKET" ToRole="hdTICKETFILE" />
           <NavigationProperty Name="hdTICKETTASK" Relationship="Self.FK_hdTICKETTASK_hdTICKET" FromRole="hdTICKET" ToRole="hdTICKETTASK" />
+          <NavigationProperty Name="hdUSUARIO1" Relationship="dbQuantusModel.FK_hdTICKETasignado_hdUSUARIO" FromRole="hdTICKET" ToRole="hdUSUARIO" />
         </EntityType>
         <EntityType Name="hdTICKETDET">
           <Key>
@@ -548,6 +593,7 @@
           <NavigationProperty Name="hdDEPTO" Relationship="Self.FK_hdUSUARIO_hdDEPTO" FromRole="hdUSUARIO" ToRole="hdDEPTO" />
           <NavigationProperty Name="hdSUCURSAL" Relationship="Self.FK_hdUSARIO_hdSUCURSAL" FromRole="hdUSUARIO" ToRole="hdSUCURSAL" />
           <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKET_hdUSUARIO" FromRole="hdUSUARIO" ToRole="hdTICKET" />
+          <NavigationProperty Name="hdTICKET1" Relationship="dbQuantusModel.FK_hdTICKETasignado_hdUSUARIO" FromRole="hdUSUARIO" ToRole="hdTICKET" />
         </EntityType>
         <Association Name="FK_hdDEPTO_hdCLIENTE">
           <End Role="hdCLIENTE" Type="Self.hdCLIENTE" Multiplicity="1" />
@@ -797,7 +843,52 @@
             <End Role="hdTICKET" EntitySet="hdTICKET" />
             <End Role="hdTICKETTASK" EntitySet="hdTICKETTASK" />
           </AssociationSet>
+          <EntitySet Name="hdPARAM" EntityType="dbQuantusModel.hdPARAM" />
+          <AssociationSet Name="FK_hdPARAM_hdCLIENTE" Association="dbQuantusModel.FK_hdPARAM_hdCLIENTE">
+            <End Role="hdCLIENTE" EntitySet="hdCLIENTE" />
+            <End Role="hdPARAM" EntitySet="hdPARAM" />
+          </AssociationSet>
+          <AssociationSet Name="FK_hdTICKETasignado_hdUSUARIO" Association="dbQuantusModel.FK_hdTICKETasignado_hdUSUARIO">
+            <End Role="hdUSUARIO" EntitySet="hdUSUARIO" />
+            <End Role="hdTICKET" EntitySet="hdTICKET" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="hdPARAM">
+          <Key>
+            <PropertyRef Name="IDPARAM" />
+          </Key>
+          <Property Name="IDPARAM" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
+          <Property Name="DESCPARAM" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="VALOR" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="hdCLIENTE" Relationship="dbQuantusModel.FK_hdPARAM_hdCLIENTE" FromRole="hdPARAM" ToRole="hdCLIENTE" />
+        </EntityType>
+        <Association Name="FK_hdPARAM_hdCLIENTE">
+          <End Type="dbQuantusModel.hdCLIENTE" Role="hdCLIENTE" Multiplicity="1" />
+          <End Type="dbQuantusModel.hdPARAM" Role="hdPARAM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdCLIENTE">
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdPARAM">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_hdTICKETasignado_hdUSUARIO">
+          <End Type="dbQuantusModel.hdUSUARIO" Role="hdUSUARIO" Multiplicity="0..1" />
+          <End Type="dbQuantusModel.hdTICKET" Role="hdTICKET" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hdUSUARIO">
+              <PropertyRef Name="IDUSUARIO" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Principal>
+            <Dependent Role="hdTICKET">
+              <PropertyRef Name="ASIGNADOA" />
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -939,6 +1030,16 @@
                 <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
                 <ScalarProperty Name="FECHAALTA" ColumnName="FECHAALTA" />
                 <ScalarProperty Name="FECHAMOD" ColumnName="FECHAMOD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hdPARAM">
+            <EntityTypeMapping TypeName="dbQuantusModel.hdPARAM">
+              <MappingFragment StoreEntitySet="hdPARAM">
+                <ScalarProperty Name="VALOR" ColumnName="VALOR" />
+                <ScalarProperty Name="DESCPARAM" ColumnName="DESCPARAM" />
+                <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
+                <ScalarProperty Name="IDPARAM" ColumnName="IDPARAM" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

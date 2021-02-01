@@ -46,5 +46,6 @@ namespace helpDeskAPI.Models
         public virtual ICollection<hdTICKETFILE> hdTICKETFILE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hdTICKETTASK> hdTICKETTASK { get; set; }
+        public virtual hdUSUARIO hdUSUARIO1 { get; set; }
     }
 }

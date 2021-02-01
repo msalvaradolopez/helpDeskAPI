@@ -23,6 +23,7 @@ namespace helpDeskAPI.Models
             this.hdTIPO = new HashSet<hdTIPO>();
             this.hdUSUARIO = new HashSet<hdUSUARIO>();
             this.hdSUCURSAL = new HashSet<hdSUCURSAL>();
+            this.hdPARAM = new HashSet<hdPARAM>();
         }
     
         public int IDCLIENTE { get; set; }
@@ -47,5 +48,7 @@ namespace helpDeskAPI.Models
         public virtual ICollection<hdUSUARIO> hdUSUARIO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hdSUCURSAL> hdSUCURSAL { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<hdPARAM> hdPARAM { get; set; }
     }
 }

@@ -36,5 +36,6 @@ namespace helpDeskAPI.Models
         public virtual DbSet<hdTICKETTASK> hdTICKETTASK { get; set; }
         public virtual DbSet<hdTIPO> hdTIPO { get; set; }
         public virtual DbSet<hdUSUARIO> hdUSUARIO { get; set; }
+        public virtual DbSet<hdPARAM> hdPARAM { get; set; }
     }
 }

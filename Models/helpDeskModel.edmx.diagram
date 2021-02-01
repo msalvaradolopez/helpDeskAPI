@@ -30,6 +30,9 @@
         <AssociationConnector Association="dbQuantusModel.FK_hdTICKETDETFILE_TICKET" ManuallyRouted="false" />
         <AssociationConnector Association="dbQuantusModel.FK_hdTICKETFILE_TICKET" ManuallyRouted="false" />
         <AssociationConnector Association="dbQuantusModel.FK_hdTICKETTASK_hdTICKET" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="dbQuantusModel.hdPARAM" Width="1.5" PointX="3" PointY="18.125" />
+        <AssociationConnector Association="dbQuantusModel.FK_hdPARAM_hdCLIENTE" />
+        <AssociationConnector Association="dbQuantusModel.FK_hdTICKETasignado_hdUSUARIO" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

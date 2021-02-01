@@ -18,6 +18,7 @@ namespace helpDeskAPI.Models
         public hdUSUARIO()
         {
             this.hdTICKET = new HashSet<hdTICKET>();
+            this.hdTICKET1 = new HashSet<hdTICKET>();
         }
     
         public string IDUSUARIO { get; set; }
@@ -38,5 +39,7 @@ namespace helpDeskAPI.Models
         public virtual hdSUCURSAL hdSUCURSAL { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hdTICKET> hdTICKET { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<hdTICKET> hdTICKET1 { get; set; }
     }
 }
