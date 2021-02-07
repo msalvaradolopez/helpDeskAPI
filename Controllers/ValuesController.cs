@@ -900,6 +900,10 @@ namespace helpDeskAPI.Controllers
 
                     _idticket++;
 
+                    _tickets.VALOR = _idticket.ToString();
+
+                    db.SaveChanges();
+
                     string _numeroTicket = _idticket.ToString("INC00000");
 
                     return _numeroTicket;
@@ -927,6 +931,7 @@ namespace helpDeskAPI.Controllers
 
                     var _tickets = db.hdTICKET
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente && ((oPARAM.rol == "A") || (oPARAM.rol == "U" && x.IDUSUARIO == oPARAM.idusuario)))
+                        .OrderByDescending(x => x.FECHA)
                         .Select(x => new
                         {
                             x.IDTICKET,
@@ -959,7 +964,7 @@ namespace helpDeskAPI.Controllers
         [AcceptVerbs("POST")]
         [HttpPost()]
         [Route("getTicketByID")]
-        public IEnumerable<object> getTicketByID([FromBody] PARAM oPARAM)
+        public object getTicketByID([FromBody] PARAM oPARAM)
         {
             using (dbQuantusEntities db = new dbQuantusEntities())
             {
@@ -985,7 +990,7 @@ namespace helpDeskAPI.Controllers
                             x.ORIGEN,
                             x.FECHA
                         })
-                        .ToList();
+                        .FirstOrDefault();
 
                     return _tickets;
 
@@ -1008,14 +1013,20 @@ namespace helpDeskAPI.Controllers
             {
                 try
                 {
+                    string _fechaApp = oTICKET.FECHA.ToString();
+                    string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
+                    DateTime _fechaSistema = new DateTime(Int32.Parse( _fechaSplit[2].Substring(0, 4)), Int32.Parse( _fechaSplit[1]), Int32.Parse( _fechaSplit[0]));
 
-                    var _sla = db.hdTICKET
+
+                    var _ticket = db.hdTICKET
                         .Where(x => x.IDTICKET == oTICKET.IDTICKET && x.IDCLIENTE == oTICKET.IDCLIENTE)
                         .SingleOrDefault();
 
 
-                    if (_sla != null)
+                    if (_ticket != null)
                         throw new Exception("El Ticket YA existe.");
+
+                    oTICKET.FECHA = _fechaSistema;
 
                     db.hdTICKET.Add(oTICKET);
                     db.SaveChanges();
@@ -1143,15 +1154,12 @@ namespace helpDeskAPI.Controllers
             {
                 try
                 {
+                    string _fechaApp = oTICKETDET.FECHA.ToString();
+                    string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
+                    DateTime _fechaSistema = new DateTime(Int32.Parse(_fechaSplit[2].Substring(0, 4)), Int32.Parse(_fechaSplit[1]), Int32.Parse(_fechaSplit[0]));
 
-                    var _ticketdet = db.hdTICKETDET
-                        .Where(x => x.IDTICKET == oTICKETDET.IDTICKET && x.IDCLIENTE == oTICKETDET.IDCLIENTE)
-                        .SingleOrDefault();
 
-
-                    if (_ticketdet != null)
-                        throw new Exception("El Ticket YA existe.");
-
+                    oTICKETDET.FECHA = _fechaSistema;
                     db.hdTICKETDET.Add(oTICKETDET);
                     db.SaveChanges();
 
