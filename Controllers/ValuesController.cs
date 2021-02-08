@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using helpDeskAPI.Models;
+using helpDeskAPI.EnviarEmail;
 
 namespace helpDeskAPI.Controllers
 {
@@ -424,7 +425,7 @@ namespace helpDeskAPI.Controllers
                     string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
 
                     var _usarios = db.hdUSUARIO
-                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && (x.NOMUSUARIO.Contains(_valor) || _valor == "0"))
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && (x.ROL == oPARAM.rol || oPARAM.rol == "0") && (x.NOMUSUARIO.Contains(_valor) || _valor == "0"))
                         .Select(x => new { x.IDUSUARIO, x.IDCLIENTE, x.hdSUCURSAL.NOMSUCURSAL, x.hdDEPTO.NOMDEPTO, x.NOMUSUARIO, x.EMAIL, x.TELEFONO, x.PASSW, x.ROL, x.ESTATUS })
                         .ToList();
 
@@ -1063,8 +1064,8 @@ namespace helpDeskAPI.Controllers
 
 
                     _ticket.ESTATUS = oTICKET.ESTATUS;
-                    _ticket.ASIGNADOA = oTICKET.ASIGNADOA;
-                    _ticket.IDPRIORIDAD = oTICKET.IDPRIORIDAD;
+                    _ticket.ASIGNADOA = oTICKET.ASIGNADOA == null ? _ticket.ASIGNADOA : oTICKET.ASIGNADOA;
+                    _ticket.IDPRIORIDAD = oTICKET.IDPRIORIDAD == 0 ? _ticket.IDPRIORIDAD : oTICKET.IDPRIORIDAD;
 
                     db.SaveChanges();
 
@@ -1130,7 +1131,8 @@ namespace helpDeskAPI.Controllers
 
                     var _ticketsDet = db.hdTICKETDET
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDTICKET == _valor)
-                        .Select(x => new { x.IDTICKETDET, x.IDTICKET, x.IDCLIENTE, x.IDUSUARIO, x.DESCTICKETDET, x.FECHA })
+                        .OrderByDescending(x => x.IDTICKETDET)
+                        .Select(x => new { x.IDTICKETDET, x.IDTICKET, x.IDCLIENTE, x.IDUSUARIO, x.DESCTICKETDET, x.FECHA, x.hdTICKET.hdUSUARIO.NOMUSUARIO })
                         .ToList();
 
                     return _ticketsDet;
@@ -1152,31 +1154,68 @@ namespace helpDeskAPI.Controllers
         {
             using (dbQuantusEntities db = new dbQuantusEntities())
             {
-                try
+                using (var dbTranstaction = db.Database.BeginTransaction())
                 {
-                    string _fechaApp = oTICKETDET.FECHA.ToString();
-                    string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
-                    DateTime _fechaSistema = new DateTime(Int32.Parse(_fechaSplit[2].Substring(0, 4)), Int32.Parse(_fechaSplit[1]), Int32.Parse(_fechaSplit[0]));
+
+                    try
+                    {
+                        string _fechaApp = oTICKETDET.FECHA.ToString();
+                        string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
+                        DateTime _fechaSistema = new DateTime(Int32.Parse(_fechaSplit[2].Substring(0, 4)), Int32.Parse(_fechaSplit[1]), Int32.Parse(_fechaSplit[0]));
 
 
-                    oTICKETDET.FECHA = _fechaSistema;
-                    db.hdTICKETDET.Add(oTICKETDET);
-                    db.SaveChanges();
+                        oTICKETDET.FECHA = _fechaSistema;
+                        db.hdTICKETDET.Add(oTICKETDET);
+                        db.SaveChanges();
 
-                    return "Registro ingresado ok.";
+                        var _ticket = db.hdTICKET.Where(x => x.IDCLIENTE == oTICKETDET.IDCLIENTE && x.IDTICKET == oTICKETDET.IDTICKET)
+                            .Select(x => new { x.IDUSUARIO, x.hdUSUARIO.NOMUSUARIO, x.ASUNTO, x.ESTATUS, x.hdUSUARIO.EMAIL, x.ASIGNADOA, NOMASGINADOA = x.hdUSUARIO1.NOMUSUARIO, x.FECHA })
+                            .FirstOrDefault();
 
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                        string _asunto = _ticket.ASUNTO;
+                        string _descticket = oTICKETDET.DESCTICKETDET;
+                        string _nomusuario = _ticket.NOMUSUARIO;
+                        string _usuarioemail = _ticket.EMAIL;
+                        string _nomasignado = _ticket.NOMASGINADOA;
+                        string _estatus = _ticket.ESTATUS;
+                        string _fecha = (DateTime.Parse(_ticket.FECHA.ToString())).ToString("dd/MM/yyyy");
+
+                        if (_estatus == "O")
+                            _estatus = "ABIERTO";
+                        if (_estatus == "A")
+                            _estatus = "ASIGNADO";
+                        if (_estatus == "R")
+                            _estatus = "RE-ABIERTO";
+                        if (_estatus == "C")
+                            _estatus = "CERRADO";
+
+                        string mensaje = @"<html>
+                                        <body>
+                                        <p> Esimado(a) usuario :" + _nomusuario + ",</p> " +
+                                                " <p>" + "Reciba la notificaión del ticket #" + oTICKETDET.IDTICKET +
+                                                        " con estatus actual : " + _estatus +
+                                                        " fecha generación :" + _fecha + " </p> " +
+                                                        " <p>" + "Descripción: " + oTICKETDET.DESCTICKETDET + " </p> ";
+
+
+                        sendEmail _email = new sendEmail();
+
+                        _email.mandarEmail(_usuarioemail, "HELPDESK : " + _asunto, mensaje);
+
+                        dbTranstaction.Commit();
+                        return "Registro ingresado ok.";
+
+                    }
+                    catch (Exception ex)
+                    {
+                        dbTranstaction.Rollback();
+                        throw ex;
+                    }
                 }
             }
         }
-
-
-
-
         #endregion
+
 
     }
 }
