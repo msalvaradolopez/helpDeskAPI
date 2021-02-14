@@ -879,21 +879,17 @@ namespace helpDeskAPI.Controllers
 
         #region TICKETS
 
-        // POST api/values -- GET ID NEW TICKET
-        [AcceptVerbs("POST")]
-        [HttpPost()]
-        [Route("getNewIdTicket")]
-        public string getNewIdTicket([FromBody] PARAM oPARAM)
+        
+        public string getNewIdTicket(int idcliente)
         {
             using (dbQuantusEntities db = new dbQuantusEntities())
             {
                 try
                 {
                     int _idticket = 0;
-                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
 
                     hdPARAM _tickets = db.hdPARAM
-                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDPARAM == "idTicket")
+                        .Where(x => x.IDCLIENTE == idcliente && x.IDPARAM == "idTicket")
                         .FirstOrDefault();
 
                     if (_tickets != null)
@@ -981,6 +977,7 @@ namespace helpDeskAPI.Controllers
                             x.IDCLIENTE,
                             x.IDPRIORIDAD,
                             x.IDTIPO,
+                            x.hdTIPO.NOMTIPO,
                             x.IDUSUARIO,
                             x.hdUSUARIO.NOMUSUARIO,
                             x.ASUNTO,
@@ -1014,25 +1011,40 @@ namespace helpDeskAPI.Controllers
             {
                 try
                 {
-                    string _fechaApp = oTICKET.FECHA.ToString();
-                    string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
-                    DateTime _fechaSistema = new DateTime(Int32.Parse( _fechaSplit[2].Substring(0, 4)), Int32.Parse( _fechaSplit[1]), Int32.Parse( _fechaSplit[0]));
+                    int _idticket = 0;
+                    // string _fechaApp = oTICKET.FECHA.ToString();
+                    // string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
+                    // DateTime _fechaSistema = new DateTime(Int32.Parse( _fechaSplit[2].Substring(0, 4)), Int32.Parse( _fechaSplit[1]), Int32.Parse( _fechaSplit[0]));
 
+                    // GENERA NUEVO TICKET
+                    hdPARAM _PARAM = db.hdPARAM
+                       .Where(x => x.IDCLIENTE == oTICKET.IDCLIENTE && x.IDPARAM == "idTicket")
+                       .FirstOrDefault();
+
+                    if (_PARAM != null)
+                        _idticket = Int32.Parse(_PARAM.VALOR);
+
+                    _idticket++;
+
+                    _PARAM.VALOR = _idticket.ToString();
+
+                    string _numeroTicket = _idticket.ToString("INC00000");
 
                     var _ticket = db.hdTICKET
-                        .Where(x => x.IDTICKET == oTICKET.IDTICKET && x.IDCLIENTE == oTICKET.IDCLIENTE)
+                        .Where(x => x.IDTICKET == _numeroTicket && x.IDCLIENTE == oTICKET.IDCLIENTE)
                         .SingleOrDefault();
 
 
                     if (_ticket != null)
                         throw new Exception("El Ticket YA existe.");
 
-                    oTICKET.FECHA = _fechaSistema;
+                    oTICKET.IDTICKET = _numeroTicket;
+                    // oTICKET.FECHA = _fechaSistema;
 
                     db.hdTICKET.Add(oTICKET);
                     db.SaveChanges();
 
-                    return "Registro ingresado ok.";
+                    return _numeroTicket;
 
                 }
                 catch (Exception ex)
@@ -1066,6 +1078,7 @@ namespace helpDeskAPI.Controllers
                     _ticket.ESTATUS = oTICKET.ESTATUS;
                     _ticket.ASIGNADOA = oTICKET.ASIGNADOA == null ? _ticket.ASIGNADOA : oTICKET.ASIGNADOA;
                     _ticket.IDPRIORIDAD = oTICKET.IDPRIORIDAD == 0 ? _ticket.IDPRIORIDAD : oTICKET.IDPRIORIDAD;
+                    _ticket.ORIGEN = oTICKET.ORIGEN;
 
                     db.SaveChanges();
 
@@ -1160,11 +1173,11 @@ namespace helpDeskAPI.Controllers
                     try
                     {
                         string _fechaApp = oTICKETDET.FECHA.ToString();
-                        string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
-                        DateTime _fechaSistema = new DateTime(Int32.Parse(_fechaSplit[2].Substring(0, 4)), Int32.Parse(_fechaSplit[1]), Int32.Parse(_fechaSplit[0]));
+                        // string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
+                        // DateTime _fechaSistema = new DateTime(Int32.Parse(_fechaSplit[2].Substring(0, 4)), Int32.Parse(_fechaSplit[1]), Int32.Parse(_fechaSplit[0]));
 
 
-                        oTICKETDET.FECHA = _fechaSistema;
+                        // oTICKETDET.FECHA = _fechaSistema;
                         db.hdTICKETDET.Add(oTICKETDET);
                         db.SaveChanges();
 
