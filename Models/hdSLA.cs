@@ -14,13 +14,19 @@ namespace helpDeskAPI.Models
     
     public partial class hdSLA
     {
-        public int IDSLA { get; set; }
-        public int IDCLIENTE { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public hdSLA()
+        {
+            this.hdTICKET = new HashSet<hdTICKET>();
+        }
+    
         public int IDPRIORIDAD { get; set; }
+        public int IDCLIENTE { get; set; }
         public int RESPONDEREN { get; set; }
         public int RESOLVEREN { get; set; }
         public string ESTATUS { get; set; }
     
-        public virtual hdCLIENTE hdCLIENTE { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<hdTICKET> hdTICKET { get; set; }
     }
 }

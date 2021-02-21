@@ -18,7 +18,6 @@ namespace helpDeskAPI.Models
         public hdCLIENTE()
         {
             this.hdDEPTO = new HashSet<hdDEPTO>();
-            this.hdSLA = new HashSet<hdSLA>();
             this.hdTICKET = new HashSet<hdTICKET>();
             this.hdTIPO = new HashSet<hdTIPO>();
             this.hdUSUARIO = new HashSet<hdUSUARIO>();
@@ -38,8 +37,6 @@ namespace helpDeskAPI.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hdDEPTO> hdDEPTO { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<hdSLA> hdSLA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hdTICKET> hdTICKET { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

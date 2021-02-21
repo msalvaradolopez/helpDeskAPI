@@ -27,7 +27,6 @@ namespace helpDeskAPI.Models
     
         public virtual DbSet<hdCLIENTE> hdCLIENTE { get; set; }
         public virtual DbSet<hdDEPTO> hdDEPTO { get; set; }
-        public virtual DbSet<hdSLA> hdSLA { get; set; }
         public virtual DbSet<hdSUCURSAL> hdSUCURSAL { get; set; }
         public virtual DbSet<hdTICKET> hdTICKET { get; set; }
         public virtual DbSet<hdTICKETDET> hdTICKETDET { get; set; }
@@ -37,5 +36,6 @@ namespace helpDeskAPI.Models
         public virtual DbSet<hdTIPO> hdTIPO { get; set; }
         public virtual DbSet<hdUSUARIO> hdUSUARIO { get; set; }
         public virtual DbSet<hdPARAM> hdPARAM { get; set; }
+        public virtual DbSet<hdSLA> hdSLA { get; set; }
     }
 }

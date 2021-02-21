@@ -7,7 +7,6 @@
       <Diagram DiagramId="309033b30c5f493199e2dd5b641e7c31" Name="Diagram1">
         <EntityTypeShape EntityType="dbQuantusModel.hdCLIENTE" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
         <EntityTypeShape EntityType="dbQuantusModel.hdDEPTO" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="dbQuantusModel.hdSLA" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
         <EntityTypeShape EntityType="dbQuantusModel.hdSUCURSAL" Width="1.5" PointX="3" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="dbQuantusModel.hdTICKET" Width="1.5" PointX="7.5" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="dbQuantusModel.hdTICKETDET" Width="1.5" PointX="9.75" PointY="7.125" IsExpanded="true" />
@@ -17,7 +16,6 @@
         <EntityTypeShape EntityType="dbQuantusModel.hdTIPO" Width="1.5" PointX="3" PointY="15.375" IsExpanded="true" />
         <EntityTypeShape EntityType="dbQuantusModel.hdUSUARIO" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
         <AssociationConnector Association="dbQuantusModel.FK_hdDEPTO_hdCLIENTE" ManuallyRouted="false" />
-        <AssociationConnector Association="dbQuantusModel.FK_hdSLA_hdCLIENTE" ManuallyRouted="false" />
         <AssociationConnector Association="dbQuantusModel.FK_hdTICKET_hdCLIENTE" ManuallyRouted="false" />
         <AssociationConnector Association="dbQuantusModel.FK_hdTIPO_hdCLIENTE" ManuallyRouted="false" />
         <AssociationConnector Association="dbQuantusModel.FK_hdUSUARIO_hdCLIENTE" ManuallyRouted="false" />
@@ -33,6 +31,8 @@
         <EntityTypeShape EntityType="dbQuantusModel.hdPARAM" Width="1.5" PointX="3" PointY="18.125" />
         <AssociationConnector Association="dbQuantusModel.FK_hdPARAM_hdCLIENTE" />
         <AssociationConnector Association="dbQuantusModel.FK_hdTICKETasignado_hdUSUARIO" />
+        <EntityTypeShape EntityType="dbQuantusModel.hdSLA" Width="1.5" PointX="0.75" PointY="0.875" />
+        <AssociationConnector Association="dbQuantusModel.FK_hdTICKET_hdSLA" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

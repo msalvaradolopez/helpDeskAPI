@@ -33,7 +33,7 @@ namespace helpDeskAPI.Models
         public string ASIGNADOA { get; set; }
         public int IDPRIORIDAD { get; set; }
         public int ORIGEN { get; set; }
-        public System.DateTime FECHA { get; set; }
+        public Nullable<System.DateTime> FECHA { get; set; }
     
         public virtual hdCLIENTE hdCLIENTE { get; set; }
         public virtual hdTIPO hdTIPO { get; set; }
@@ -47,5 +47,6 @@ namespace helpDeskAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hdTICKETTASK> hdTICKETTASK { get; set; }
         public virtual hdUSUARIO hdUSUARIO1 { get; set; }
+        public virtual hdSLA hdSLA { get; set; }
     }
 }

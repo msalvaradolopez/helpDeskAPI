@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using helpDeskAPI.Models;
 using helpDeskAPI.EnviarEmail;
+using System.Data;
 
 namespace helpDeskAPI.Controllers
 {
@@ -759,7 +760,7 @@ namespace helpDeskAPI.Controllers
 
                     var _slas = db.hdSLA
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente)
-                        .Select(x => new { x.IDSLA, x.IDCLIENTE, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
+                        .Select(x => new { x.IDCLIENTE, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
                         .ToList();
 
                     /*
@@ -796,8 +797,8 @@ namespace helpDeskAPI.Controllers
                     string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
 
                     var _sla = db.hdSLA
-                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDSLA.ToString() == _valor)
-                        .Select(x => new { x.IDSLA, x.IDCLIENTE, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDPRIORIDAD.ToString() == _valor)
+                        .Select(x => new { x.IDCLIENTE, x.IDPRIORIDAD, x.RESOLVEREN, x.RESPONDEREN, x.ESTATUS })
                         .FirstOrDefault();
 
                     return _sla;
@@ -822,7 +823,7 @@ namespace helpDeskAPI.Controllers
                 {
 
                     var _sla = db.hdSLA
-                        .Where(x => x.IDSLA == oSLA.IDSLA && x.IDCLIENTE == oSLA.IDCLIENTE)
+                        .Where(x => x.IDPRIORIDAD == oSLA.IDPRIORIDAD && x.IDCLIENTE == oSLA.IDCLIENTE)
                         .SingleOrDefault();
 
 
@@ -854,13 +855,12 @@ namespace helpDeskAPI.Controllers
                 {
 
                     var _sla = db.hdSLA
-                        .Where(x => x.IDSLA == oSLA.IDSLA && x.IDCLIENTE == oSLA.IDCLIENTE)
+                        .Where(x => x.IDPRIORIDAD == oSLA.IDPRIORIDAD && x.IDCLIENTE == oSLA.IDCLIENTE)
                         .SingleOrDefault();
 
 
                     if (_sla == null)
                         throw new Exception("el SLA no existe.");
-
 
                     _sla.RESPONDEREN = oSLA.RESPONDEREN;
                     _sla.RESOLVEREN = oSLA.RESOLVEREN;
@@ -879,7 +879,7 @@ namespace helpDeskAPI.Controllers
 
         #region TICKETS
 
-        
+
         public string getNewIdTicket(int idcliente)
         {
             using (dbQuantusEntities db = new dbQuantusEntities())
@@ -924,11 +924,14 @@ namespace helpDeskAPI.Controllers
             {
                 try
                 {
+                    DateTime _fechaActual = DateTime.Now;
                     string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    // List<hdTICKET> tickets = new List<hdTICKET>();
 
                     var _tickets = db.hdTICKET
                         .Where(x => x.IDCLIENTE == oPARAM.idcliente && ((oPARAM.rol == "A") || (oPARAM.rol == "U" && x.IDUSUARIO == oPARAM.idusuario)))
-                        .OrderByDescending(x => x.FECHA)
+                        .OrderByDescending(x => new { x.FECHA, x.IDTICKET })
                         .Select(x => new
                         {
                             x.IDTICKET,
@@ -943,11 +946,46 @@ namespace helpDeskAPI.Controllers
                             x.ASIGNADOA,
                             NOMASIGNADO = x.hdUSUARIO1.NOMUSUARIO,
                             x.ORIGEN,
-                            x.FECHA
-                        })
-                        .ToList();
+                            x.FECHA,
+                            x.hdSLA.RESOLVEREN,
+                            SLA = ""
+                        }).ToList();
 
-                    return _tickets;
+                    List<object> tickets = new List<object>();
+
+                    foreach (var x in _tickets)
+                    {
+                        string _resp = "";
+                        DateTime xFecha = x.FECHA.GetValueOrDefault();
+                        double xTotalHoras = _fechaActual.Subtract(xFecha).TotalHours;
+                        if (xTotalHoras < x.RESOLVEREN)
+                            _resp = "EN TIEMPO";
+                        else
+                            _resp = "ATRASADO";
+
+                        tickets.Add(
+                            new
+                            {
+                                x.IDTICKET,
+                                x.IDCLIENTE,
+                                x.IDPRIORIDAD,
+                                x.IDTIPO,
+                                x.IDUSUARIO,
+                                x.NOMUSUARIO,
+                                x.ASUNTO,
+                                x.DESCTICKET,
+                                x.ESTATUS,
+                                x.ASIGNADOA,
+                                x.NOMASIGNADO,
+                                x.ORIGEN,
+                                x.FECHA,
+                                x.RESOLVEREN,
+                                SLA = _resp
+                            }
+                            );
+                    }
+
+                    return tickets;
 
                 }
                 catch (Exception ex)
@@ -970,7 +1008,7 @@ namespace helpDeskAPI.Controllers
                     string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
 
                     var _tickets = db.hdTICKET
-                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDTICKET == _valor && x.IDUSUARIO == oPARAM.idusuario)
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDTICKET == _valor)
                         .Select(x => new
                         {
                             x.IDTICKET,
@@ -1012,6 +1050,7 @@ namespace helpDeskAPI.Controllers
                 try
                 {
                     int _idticket = 0;
+                    DateTime _fechaActual = DateTime.Now;
                     // string _fechaApp = oTICKET.FECHA.ToString();
                     // string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
                     // DateTime _fechaSistema = new DateTime(Int32.Parse( _fechaSplit[2].Substring(0, 4)), Int32.Parse( _fechaSplit[1]), Int32.Parse( _fechaSplit[0]));
@@ -1039,7 +1078,7 @@ namespace helpDeskAPI.Controllers
                         throw new Exception("El Ticket YA existe.");
 
                     oTICKET.IDTICKET = _numeroTicket;
-                    // oTICKET.FECHA = _fechaSistema;
+                    oTICKET.FECHA = _fechaActual;
 
                     db.hdTICKET.Add(oTICKET);
                     db.SaveChanges();
