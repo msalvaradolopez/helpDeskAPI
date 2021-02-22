@@ -184,7 +184,7 @@ namespace helpDeskAPI.Controllers
             }
         }
 
-        // POST api/values -- INGRESA SUCURSAL.
+        // POST api/values -- ACTUALIZA SUCURSAL.
         [AcceptVerbs("POST")]
         [HttpPost()]
         [Route("updSucursal")]
@@ -930,7 +930,7 @@ namespace helpDeskAPI.Controllers
                     // List<hdTICKET> tickets = new List<hdTICKET>();
 
                     var _tickets = db.hdTICKET
-                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && ((oPARAM.rol == "A") || (oPARAM.rol == "U" && x.IDUSUARIO == oPARAM.idusuario)))
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && ((oPARAM.rol == "A" || oPARAM.rol == "S") || (oPARAM.rol == "U" && x.IDUSUARIO == oPARAM.idusuario)))
                         .OrderByDescending(x => new { x.FECHA, x.IDTICKET })
                         .Select(x => new
                         {
@@ -1267,6 +1267,143 @@ namespace helpDeskAPI.Controllers
             }
         }
         #endregion
+
+        // POST api/values -- LISTADO DE PARAMETROS.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getParamList")]
+        public IEnumerable<object> getParamList([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    var _param = db.hdPARAM
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente)
+                        .Select(x => new { x.IDPARAM, x.IDCLIENTE, x.DESCPARAM, x.VALOR })
+                        .ToList();
+
+                    return _param;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- LISTADO DE SUCURSALES.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getParamByID")]
+        public object getParamByID([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    var _param = db.hdPARAM
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.IDPARAM == _valor)
+                        .Select(x => new { x.IDPARAM, x.IDCLIENTE, x.DESCPARAM, x.VALOR })
+                        .FirstOrDefault();
+
+                    return _param;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+
+        // POST api/values -- ACTUALIZA PARAMETROS.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("updParam")]
+        public string updParam([FromBody] hdPARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+
+                    var _param = db.hdPARAM
+                        .Where(x => x.IDCLIENTE == oPARAM.IDCLIENTE && x.IDPARAM == oPARAM.IDPARAM)
+                        .SingleOrDefault();
+
+
+                    if (_param == null)
+                        throw new Exception("El parametro no existe.");
+
+
+                    _param.VALOR = oPARAM.VALOR;
+                    db.SaveChanges();
+
+                    return "Registro actualizado ok.";
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+
+        // POST api/values -- LISTADO DE PARAMETROS.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getDashBoardIndicadores")]
+        public object getDashBoardIndicadores([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    var _tickets = db.hdTICKET
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente)
+                        .Select(x => new { x.ESTATUS, x.hdSLA.RESOLVEREN, x.FECHA })
+                        .ToList();
+
+                    int _total = 0;
+                    int _sinasignar = 0;
+                    int _atrasados = 0;
+                    int _reabiertos = 0;
+                    DateTime _fechaActual = DateTime.Now;
+
+                    foreach (var item in _tickets) {
+                        _total++;
+                        if (item.ESTATUS == "O") _sinasignar++;
+                        if (item.ESTATUS == "R") _reabiertos++;
+                        if (item.ESTATUS != "C") {
+                            string _resp = "";
+                            DateTime xFecha = item.FECHA.GetValueOrDefault();
+                            double xTotalHoras = _fechaActual.Subtract(xFecha).TotalHours;
+                            if (xTotalHoras > item.RESOLVEREN) _atrasados++;
+                                
+                        }
+                    }
+
+                    var _indicadores = new { TOTAL = _total, SINASIGNAR = _sinasignar, ATRASADOS = _atrasados, REABIERTOS = _reabiertos };
+
+                    return _indicadores;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
 
 
     }

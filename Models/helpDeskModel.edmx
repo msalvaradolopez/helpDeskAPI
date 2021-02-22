@@ -34,7 +34,7 @@
           <Property Name="IDPARAM" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="IDCLIENTE" Type="int" Nullable="false" />
           <Property Name="DESCPARAM" Type="varchar" MaxLength="60" Nullable="false" />
-          <Property Name="VALOR" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="VALOR" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hdSLA">
           <Key>
@@ -838,7 +838,7 @@
           <Property Name="IDPARAM" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
           <Property Name="DESCPARAM" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
-          <Property Name="VALOR" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="VALOR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="hdCLIENTE" Relationship="dbQuantusModel.FK_hdPARAM_hdCLIENTE" FromRole="hdPARAM" ToRole="hdCLIENTE" />
         </EntityType>
         <Association Name="FK_hdPARAM_hdCLIENTE">
