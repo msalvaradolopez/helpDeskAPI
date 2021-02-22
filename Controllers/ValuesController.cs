@@ -1230,7 +1230,7 @@ namespace helpDeskAPI.Controllers
                         string _usuarioemail = _ticket.EMAIL;
                         string _nomasignado = _ticket.NOMASGINADOA;
                         string _estatus = _ticket.ESTATUS;
-                        string _fecha = (DateTime.Parse(_ticket.FECHA.ToString())).ToString("dd/MM/yyyy");
+                        string _fecha = (DateTime.Parse(_ticket.FECHA.ToString())).ToString("dd/MM/yyyy h:mm");
 
                         if (_estatus == "O")
                             _estatus = "ABIERTO";
@@ -1253,6 +1253,25 @@ namespace helpDeskAPI.Controllers
                         sendEmail _email = new sendEmail();
 
                         _email.mandarEmail(_usuarioemail, "HELPDESK : " + _asunto, mensaje);
+
+                        var _usuarios = db.hdUSUARIO
+                            .Where(x => x.IDCLIENTE == oTICKETDET.IDCLIENTE && x.ROL == "A")
+                            .Select(x => new { x.NOMUSUARIO, x.EMAIL }).ToList();
+
+                        foreach (var item in _usuarios) {
+                            _nomusuario = item.NOMUSUARIO;
+                            _usuarioemail = item.EMAIL;
+
+                            mensaje = @"<html>
+                                        <body>
+                                        <p> Esimado(a) usuario :" + _nomusuario + ",</p> " +
+                                                " <p>" + "Reciba la notificaión del ticket #" + oTICKETDET.IDTICKET +
+                                                        " con estatus actual : " + _estatus +
+                                                        " fecha generación :" + _fecha + " </p> " +
+                                                        " <p>" + "Descripción: " + oTICKETDET.DESCTICKETDET + " </p> ";
+
+                            _email.mandarEmail(_usuarioemail, "HELPDESK : " + _asunto, mensaje);
+                        }
 
                         dbTranstaction.Commit();
                         return "Registro ingresado ok.";
@@ -1380,22 +1399,136 @@ namespace helpDeskAPI.Controllers
                     int _reabiertos = 0;
                     DateTime _fechaActual = DateTime.Now;
 
-                    foreach (var item in _tickets) {
+                    foreach (var item in _tickets)
+                    {
                         _total++;
                         if (item.ESTATUS == "O") _sinasignar++;
                         if (item.ESTATUS == "R") _reabiertos++;
-                        if (item.ESTATUS != "C") {
+                        if (item.ESTATUS != "C")
+                        {
                             string _resp = "";
                             DateTime xFecha = item.FECHA.GetValueOrDefault();
                             double xTotalHoras = _fechaActual.Subtract(xFecha).TotalHours;
                             if (xTotalHoras > item.RESOLVEREN) _atrasados++;
-                                
+
                         }
                     }
 
                     var _indicadores = new { TOTAL = _total, SINASIGNAR = _sinasignar, ATRASADOS = _atrasados, REABIERTOS = _reabiertos };
 
                     return _indicadores;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- LISTADO DE ESTADISTICA USUARIO QUIEN OTORGAN EL SERVICIO.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getIndicadorByUser")]
+        public IEnumerable<object> getIndicadorByUser([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    string IDUSUARIO = "";
+                    string NOMUSUARIO = "";
+                    int _total = 0;
+                    int _abiertos = 0;
+                    int _atrasados = 0;
+                    int _reabiertos = 0;
+                    int _cerrados = 0;
+                    DateTime _fechaActual = DateTime.Now;
+
+                    var _usuarios = db.hdUSUARIO
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && x.ESTATUS == "A" && x.ROL != "S")
+                        .ToList();
+
+                    List<object> indByUser = new List<object>();
+
+                    foreach (hdUSUARIO usuario in _usuarios)
+                    {
+
+
+                        if (usuario.ROL == "A")
+                        {
+                            IDUSUARIO = "";
+                            NOMUSUARIO = "";
+                            _total = 0;
+                            _abiertos = 0;
+                            _atrasados = 0;
+                            _reabiertos = 0;
+                            _cerrados = 0;
+
+                            var _tickets = db.hdTICKET
+                        .Where(x => x.IDCLIENTE == usuario.IDCLIENTE && x.ASIGNADOA == usuario.IDUSUARIO)
+                        .Select(x => new { x.ESTATUS, x.hdSLA.RESOLVEREN, x.FECHA, x.ASIGNADOA, NOMASIGNADO = x.hdUSUARIO1.NOMUSUARIO, x.hdUSUARIO.NOMUSUARIO })
+                        .ToList();
+
+                            foreach (var item in _tickets)
+                            {
+                                IDUSUARIO = item.ASIGNADOA;
+                                NOMUSUARIO = item.NOMASIGNADO;
+                                _total++;
+                                if (item.ESTATUS == "O") _abiertos++;
+                                if (item.ESTATUS == "R") _reabiertos++;
+                                if (item.ESTATUS != "C")
+                                {
+                                    DateTime xFecha = item.FECHA.GetValueOrDefault();
+                                    double xTotalHoras = _fechaActual.Subtract(xFecha).TotalHours;
+                                    if (xTotalHoras > item.RESOLVEREN) _atrasados++;
+                                }
+                                if (item.ESTATUS == "C") _cerrados++;
+
+                            }
+
+                            if (_total > 0)  indByUser.Add(new { IDUSUARIO = IDUSUARIO, NOMUSUARIO = NOMUSUARIO, usuario.ROL, TOTAL = _total, ABIERTOS = _abiertos, ATRASADOS = _atrasados, REABIERTOS = _reabiertos, CERRADOS = _cerrados });
+                        }
+                        else if (usuario.ROL == "U")
+                        {
+                            IDUSUARIO = "";
+                            NOMUSUARIO = "";
+                            _total = 0;
+                            _abiertos = 0;
+                            _atrasados = 0;
+                            _reabiertos = 0;
+                            _cerrados = 0;
+
+                            var _tickets = db.hdTICKET
+                        .Where(x => x.IDCLIENTE == usuario.IDCLIENTE && x.IDUSUARIO == usuario.IDUSUARIO)
+                        .Select(x => new { x.ESTATUS, x.hdSLA.RESOLVEREN, x.FECHA, x.ASIGNADOA, NOMASIGNADO = x.hdUSUARIO1.NOMUSUARIO, x.hdUSUARIO.NOMUSUARIO, x.IDUSUARIO })
+                        .ToList();
+
+                            foreach (var item in _tickets)
+                            {
+                                IDUSUARIO = item.IDUSUARIO;
+                                NOMUSUARIO = item.NOMUSUARIO;
+                                _total++;
+                                if (item.ESTATUS == "O") _abiertos++;
+                                if (item.ESTATUS == "R") _reabiertos++;
+                                if (item.ESTATUS != "C")
+                                {
+                                    DateTime xFecha = item.FECHA.GetValueOrDefault();
+                                    double xTotalHoras = _fechaActual.Subtract(xFecha).TotalHours;
+                                    if (xTotalHoras > item.RESOLVEREN) _atrasados++;
+                                }
+                                if (item.ESTATUS == "C") _cerrados++;
+
+                                
+                            }
+                            if (_total > 0) indByUser.Add(new { IDUSUARIO = IDUSUARIO, NOMUSUARIO = NOMUSUARIO, usuario.ROL, TOTAL = _total, ABIERTOS = _abiertos, ATRASADOS = _atrasados, REABIERTOS = _reabiertos, CERRADOS = _cerrados });
+                        }
+
+                    }
+
+                    return indByUser;
 
                 }
                 catch (Exception ex)
