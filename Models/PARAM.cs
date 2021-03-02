@@ -12,5 +12,7 @@ namespace helpDeskAPI.Models
         public string idusuario { get; set; }
         public string passw { get; set; }
         public string rol { get; set; }
+        public List<string> sucursales { get; set; }
+        public List<string> temas { get; set; }
     }
 }

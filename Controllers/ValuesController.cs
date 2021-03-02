@@ -1258,7 +1258,8 @@ namespace helpDeskAPI.Controllers
                             .Where(x => x.IDCLIENTE == oTICKETDET.IDCLIENTE && x.ROL == "A")
                             .Select(x => new { x.NOMUSUARIO, x.EMAIL }).ToList();
 
-                        foreach (var item in _usuarios) {
+                        foreach (var item in _usuarios)
+                        {
                             _nomusuario = item.NOMUSUARIO;
                             _usuarioemail = item.EMAIL;
 
@@ -1389,7 +1390,10 @@ namespace helpDeskAPI.Controllers
                     string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
 
                     var _tickets = db.hdTICKET
-                        .Where(x => x.IDCLIENTE == oPARAM.idcliente)
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente &&
+                        ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0") &&
+                        oPARAM.sucursales.Any(t2 => t2.Contains(x.hdUSUARIO.IDSUCURSAL)) &&
+                        oPARAM.temas.Any(t3 => t3.Contains(x.IDTIPO.ToString())))
                         .Select(x => new { x.ESTATUS, x.hdSLA.RESOLVEREN, x.FECHA })
                         .ToList();
 
@@ -1489,7 +1493,7 @@ namespace helpDeskAPI.Controllers
 
                             }
 
-                            if (_total > 0)  indByUser.Add(new { IDUSUARIO = IDUSUARIO, NOMUSUARIO = NOMUSUARIO, usuario.ROL, TOTAL = _total, ABIERTOS = _abiertos, ATRASADOS = _atrasados, REABIERTOS = _reabiertos, CERRADOS = _cerrados });
+                            if (_total > 0) indByUser.Add(new { IDUSUARIO = IDUSUARIO, NOMUSUARIO = NOMUSUARIO, usuario.ROL, TOTAL = _total, ABIERTOS = _abiertos, ATRASADOS = _atrasados, REABIERTOS = _reabiertos, CERRADOS = _cerrados });
                         }
                         else if (usuario.ROL == "U")
                         {
@@ -1521,7 +1525,7 @@ namespace helpDeskAPI.Controllers
                                 }
                                 if (item.ESTATUS == "C") _cerrados++;
 
-                                
+
                             }
                             if (_total > 0) indByUser.Add(new { IDUSUARIO = IDUSUARIO, NOMUSUARIO = NOMUSUARIO, usuario.ROL, TOTAL = _total, ABIERTOS = _abiertos, ATRASADOS = _atrasados, REABIERTOS = _reabiertos, CERRADOS = _cerrados });
                         }
@@ -1539,5 +1543,235 @@ namespace helpDeskAPI.Controllers
         }
 
 
+        // estrucutura auxiliar
+        private class gpoTemas
+        {
+            public string NOMTIPO { get; set; }
+            public int CTDTEMA { get; set; }
+            public List<gpoSuc> gpoSuc { get; set; }
+            public gpoTemas()
+            {
+                gpoSuc = new List<gpoSuc>();
+            }
+        }
+
+        private class gpoSuc
+        {
+            public string NOMSUCURSAL { get; set; }
+            public int CTDSUCURSAL { get; set; }
+            public List<gpoTemas> gpoTemas { get; set; }
+            public gpoSuc()
+            {
+                gpoTemas = new List<gpoTemas>();
+            }
+        }
+
+        // POST api/values -- obtener indicadores por sucursal
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getGrupoSucursales")]
+        public IEnumerable<object> getGrupoSucursales([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+                    List<gpoSuc> gpoSuc = new List<gpoSuc>();
+
+                    var _grupoSucursales = db.hdTICKET
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente &&
+                        ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0") &&
+                        oPARAM.sucursales.Any(t2 => t2.Contains(x.hdUSUARIO.IDSUCURSAL)) &&
+                        oPARAM.temas.Any(t3 => t3.Contains(x.IDTIPO.ToString())))
+                        .GroupBy(x => x.hdUSUARIO.hdSUCURSAL.NOMSUCURSAL)
+                        .Select(x => new { nomSucursal = x.Key, ctdSucursal = x.Count() })
+                        .ToList();
+
+                    foreach (var item in _grupoSucursales)
+                    {
+
+                        var _grupoTemas = db.hdTICKET
+                            .Where(x => x.hdUSUARIO.hdSUCURSAL.NOMSUCURSAL == item.nomSucursal &&
+                            x.IDCLIENTE == oPARAM.idcliente &&
+                        ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0") &&
+                        oPARAM.sucursales.Any(t2 => t2.Contains(x.hdUSUARIO.IDSUCURSAL)) &&
+                        oPARAM.temas.Any(t3 => t3.Contains(x.IDTIPO.ToString())))
+                            .GroupBy(x => new { x.hdUSUARIO.hdSUCURSAL.NOMSUCURSAL, x.hdTIPO.NOMTIPO })
+                            .Select(x => new { x.Key.NOMSUCURSAL, x.Key.NOMTIPO, CTDTEMA = x.Count() })
+                            .ToList();
+
+                        var _suc = new gpoSuc();
+
+                        _suc.NOMSUCURSAL = item.nomSucursal;
+                        _suc.CTDSUCURSAL = item.ctdSucursal;
+
+                        foreach (var itemTema in _grupoTemas)
+                        {
+                            var _gpo = new gpoTemas();
+                            _gpo.NOMTIPO = itemTema.NOMTIPO;
+                            _gpo.CTDTEMA = itemTema.CTDTEMA;
+                            _suc.gpoTemas.Add(_gpo);
+                        }
+
+                        gpoSuc.Add(_suc);
+                    }
+
+                    return gpoSuc;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- obtener indicadores por sucursal
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getGrupoTemas")]
+        public IEnumerable<object> getGrupoTemas([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+                    List<gpoTemas> _gpoTemas = new List<gpoTemas>();
+
+                    var _grupoTemas = db.hdTICKET
+                            .Where(x => x.IDCLIENTE == oPARAM.idcliente &&
+                            ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0") &&
+                            oPARAM.sucursales.Any(t2 => t2.Contains(x.hdUSUARIO.IDSUCURSAL)) &&
+                            oPARAM.temas.Any(t3 => t3.Contains(x.IDTIPO.ToString())))
+                            .GroupBy(x => new { x.hdTIPO.IDTIPO, x.hdTIPO.NOMTIPO })
+                            .Select(x => new { x.Key.IDTIPO, x.Key.NOMTIPO, CTDTEMA = x.Count() })
+                            .ToList();
+
+                    foreach (var item in _grupoTemas)
+                    {
+                        var _grupoSucursales = db.hdTICKET
+                        .Where(x => x.hdTIPO.IDTIPO == item.IDTIPO &&
+                            x.IDCLIENTE == oPARAM.idcliente &&
+                            ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0") &&
+                            oPARAM.sucursales.Any(t2 => t2.Contains(x.hdUSUARIO.IDSUCURSAL)) &&
+                            oPARAM.temas.Any(t3 => t3.Contains(x.IDTIPO.ToString())))
+                        .GroupBy(x => new { x.hdUSUARIO.hdSUCURSAL.IDSUCURSAL, x.hdUSUARIO.hdSUCURSAL.NOMSUCURSAL })
+                        .Select(x => new { x.Key.NOMSUCURSAL, CTDSUC = x.Count() })
+                        .ToList();
+
+                        var _temas = new gpoTemas();
+
+                        _temas.NOMTIPO = item.NOMTIPO;
+                        _temas.CTDTEMA = item.CTDTEMA;
+
+                        foreach (var itemSuc in _grupoSucursales)
+                        {
+                            var _gpo = new gpoSuc();
+                            _gpo.NOMSUCURSAL = itemSuc.NOMSUCURSAL;
+                            _gpo.CTDSUCURSAL = itemSuc.CTDSUC;
+                            _temas.gpoSuc.Add(_gpo);
+                        }
+
+                        _gpoTemas.Add(_temas);
+                    }
+
+                    return _gpoTemas;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- LISTADO DE TICKETS DETALLE.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getFiltroSucursales")]
+        public IEnumerable<object> getFiltroSucursales([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    var _sucursales = db.hdTICKET
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0"))
+                        .GroupBy(x => new { x.hdUSUARIO.IDSUCURSAL, x.hdUSUARIO.hdSUCURSAL.NOMSUCURSAL })
+                        .OrderBy(x => x.Key.NOMSUCURSAL)
+                        .Select(x => new { x.Key.NOMSUCURSAL, x.Key.IDSUCURSAL })
+                        .ToList();
+
+                    return _sucursales;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- LISTADO DE TICKETS DETALLE.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getFiltroTemas")]
+        public IEnumerable<object> getFiltroTemas([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    var _temas = db.hdTICKET
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente && ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0"))
+                        .GroupBy(x => new { x.hdTIPO.IDTIPO, x.hdTIPO.NOMTIPO })
+                        .OrderBy(x => x.Key.NOMTIPO)
+                        .Select(x => new { x.Key.NOMTIPO, x.Key.IDTIPO })
+                        .ToList();
+
+                    return _temas;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- LISTADO DE SUCURSALES.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getTicketsDashBoard")]
+        public IEnumerable<object> getTicketsDashBoard([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+                    string _valor = oPARAM.valor == "" ? "0" : oPARAM.valor;
+
+                    var _tickets = db.hdTICKET
+                        .Where(x => x.IDCLIENTE == oPARAM.idcliente &&
+                        ((x.ESTATUS == "O" || x.ESTATUS == "A") || _valor == "0") &&
+                        oPARAM.sucursales.Any(t2 => t2.Contains(x.hdUSUARIO.IDSUCURSAL)) &&
+                        oPARAM.temas.Any(t3 => t3.Contains(x.IDTIPO.ToString())))
+                        .Select(x => new { x.IDTICKET, x.ASUNTO, x.hdUSUARIO.NOMUSUARIO, x.ESTATUS, x.FECHA, x.IDPRIORIDAD })
+                        .ToList();
+
+                    return _tickets;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
     }
 }
