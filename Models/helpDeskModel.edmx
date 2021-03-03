@@ -81,7 +81,7 @@
           <Property Name="IDTICKET" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="IDCLIENTE" Type="int" Nullable="false" />
           <Property Name="IDUSUARIO" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="DESCTICKETDET" Type="varchar" MaxLength="100" />
+          <Property Name="DESCTICKETDET" Type="varchar(max)" />
           <Property Name="FECHA" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="hdTICKETDETFILE">
@@ -510,7 +510,7 @@
           <Property Name="IDTICKET" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IDCLIENTE" Type="Int32" Nullable="false" />
           <Property Name="IDUSUARIO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DESCTICKETDET" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DESCTICKETDET" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="hdTICKET" Relationship="Self.FK_hdTICKETDET_TICKET" FromRole="hdTICKETDET" ToRole="hdTICKET" />
         </EntityType>
