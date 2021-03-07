@@ -34,6 +34,7 @@ namespace helpDeskAPI.Models
         public int IDPRIORIDAD { get; set; }
         public int ORIGEN { get; set; }
         public Nullable<System.DateTime> FECHA { get; set; }
+        public Nullable<System.DateTime> FECHACIERRE { get; set; }
     
         public virtual hdCLIENTE hdCLIENTE { get; set; }
         public virtual hdTIPO hdTIPO { get; set; }

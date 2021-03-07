@@ -948,7 +948,8 @@ namespace helpDeskAPI.Controllers
                             x.ORIGEN,
                             x.FECHA,
                             x.hdSLA.RESOLVEREN,
-                            SLA = ""
+                            SLA = "",
+                            x.FECHACIERRE
                         }).ToList();
 
                     List<object> tickets = new List<object>();
@@ -956,8 +957,14 @@ namespace helpDeskAPI.Controllers
                     foreach (var x in _tickets)
                     {
                         string _resp = "";
+                        double xTotalHoras = 0;
                         DateTime xFecha = x.FECHA.GetValueOrDefault();
-                        double xTotalHoras = _fechaActual.Subtract(xFecha).TotalHours;
+
+                        if(x.ESTATUS == "C")
+                            _fechaActual = x.FECHACIERRE.GetValueOrDefault();
+                        
+                        xTotalHoras = _fechaActual.Subtract(xFecha).TotalHours;
+
                         if (xTotalHoras < x.RESOLVEREN)
                             _resp = "EN TIEMPO";
                         else
@@ -980,7 +987,8 @@ namespace helpDeskAPI.Controllers
                                 x.ORIGEN,
                                 x.FECHA,
                                 x.RESOLVEREN,
-                                SLA = _resp
+                                SLA = _resp,
+                                x.FECHACIERRE
                             }
                             );
                     }
@@ -1051,9 +1059,9 @@ namespace helpDeskAPI.Controllers
                 {
                     int _idticket = 0;
                     DateTime _fechaActual = DateTime.Now;
-                    // string _fechaApp = oTICKET.FECHA.ToString();
-                    // string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
-                    // DateTime _fechaSistema = new DateTime(Int32.Parse( _fechaSplit[2].Substring(0, 4)), Int32.Parse( _fechaSplit[1]), Int32.Parse( _fechaSplit[0]));
+                    //string _fechaApp = oTICKET.FECHA.ToString();
+                    //string[] _fechaSplit = _fechaApp.Split(new string[] { "/" }, StringSplitOptions.None);
+                    //DateTime _fechaSistema = new DateTime(Int32.Parse(_fechaSplit[2].Substring(0, 4)), Int32.Parse(_fechaSplit[1]), Int32.Parse(_fechaSplit[0]));
 
                     // GENERA NUEVO TICKET
                     hdPARAM _PARAM = db.hdPARAM
@@ -1104,6 +1112,7 @@ namespace helpDeskAPI.Controllers
             {
                 try
                 {
+                    DateTime _fechaActual = DateTime.Now;
 
                     var _ticket = db.hdTICKET
                         .Where(x => x.IDTICKET == oTICKET.IDTICKET && x.IDCLIENTE == oTICKET.IDCLIENTE)
@@ -1119,6 +1128,11 @@ namespace helpDeskAPI.Controllers
                     _ticket.IDPRIORIDAD = oTICKET.IDPRIORIDAD == 0 ? _ticket.IDPRIORIDAD : oTICKET.IDPRIORIDAD;
                     _ticket.ORIGEN = oTICKET.ORIGEN;
 
+
+                    if (_ticket.ESTATUS == "C")
+                        _ticket.FECHACIERRE = _fechaActual;
+
+                    
                     db.SaveChanges();
 
                     return "Registro actualizado ok.";
@@ -1765,6 +1779,32 @@ namespace helpDeskAPI.Controllers
                         .ToList();
 
                     return _tickets;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- obtener informacion para validacion de login 
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("ticketsBySucTemaList")]
+        public IEnumerable<object> ticketsBySucTemaList([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+
+                    int _valor = Int32.Parse(oPARAM.valor);
+
+                    var _resp = db.ticketsBySucTemaList(_valor).ToList();
+
+
+                    return _resp;
 
                 }
                 catch (Exception ex)

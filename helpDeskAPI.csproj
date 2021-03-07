@@ -226,6 +226,9 @@
       <DependentUpon>helpDeskModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\PARAM.cs" />
+    <Compile Include="Models\ticketsBySucTemaList_Result.cs">
+      <DependentUpon>helpDeskModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

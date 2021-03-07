@@ -66,12 +66,13 @@
           <Property Name="IDTIPO" Type="int" Nullable="false" />
           <Property Name="IDUSUARIO" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="ASUNTO" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="DESCTICKET" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DESCTICKET" Type="varchar(max)" />
           <Property Name="ESTATUS" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="IDPRIORIDAD" Type="int" Nullable="false" />
           <Property Name="ORIGEN" Type="int" Nullable="false" />
           <Property Name="ASIGNADOA" Type="varchar" MaxLength="20" />
           <Property Name="FECHA" Type="datetime" />
+          <Property Name="FECHACIERRE" Type="date" />
         </EntityType>
         <EntityType Name="hdTICKETDET">
           <Key>
@@ -353,6 +354,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ticketsBySucTemaList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Tema" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="dbQuantusModelStoreContainer">
           <EntitySet Name="hdCLIENTE" EntityType="Self.hdCLIENTE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hdDEPTO" EntityType="Self.hdDEPTO" Schema="dbo" store:Type="Tables" />
@@ -486,7 +490,7 @@
           <Property Name="IDTIPO" Type="Int32" Nullable="false" />
           <Property Name="IDUSUARIO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ASUNTO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DESCTICKET" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DESCTICKET" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ESTATUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="ASIGNADOA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IDPRIORIDAD" Type="Int32" Nullable="false" />
@@ -501,6 +505,7 @@
           <NavigationProperty Name="hdTICKETTASK" Relationship="Self.FK_hdTICKETTASK_hdTICKET" FromRole="hdTICKET" ToRole="hdTICKETTASK" />
           <NavigationProperty Name="hdUSUARIO1" Relationship="dbQuantusModel.FK_hdTICKETasignado_hdUSUARIO" FromRole="hdTICKET" ToRole="hdUSUARIO" />
           <NavigationProperty Name="hdSLA" Relationship="dbQuantusModel.FK_hdTICKET_hdSLA" FromRole="hdTICKET" ToRole="hdSLA" />
+          <Property Name="FECHACIERRE" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="hdTICKETDET">
           <Key>
@@ -830,6 +835,9 @@
             <End Role="hdSLA" EntitySet="hdSLA" />
             <End Role="hdTICKET" EntitySet="hdTICKET" />
           </AssociationSet>
+          <FunctionImport Name="ticketsBySucTemaList" ReturnType="Collection(dbQuantusModel.ticketsBySucTemaList_Result)">
+          <Parameter Name="Tema" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="hdPARAM">
           <Key>
@@ -893,6 +901,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="ticketsBySucTemaList_Result">
+          <Property Type="String" Name="IDSUCURSAL" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NOMSUCURSAL" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="IDTIPO" Nullable="true" />
+          <Property Type="String" Name="NOMTIPO" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="ABIERTO" Nullable="true" />
+          <Property Type="Int32" Name="ASIGNADO" Nullable="true" />
+          <Property Type="Int32" Name="REABIERTO" Nullable="true" />
+          <Property Type="Int32" Name="CERRADO" Nullable="true" />
+          <Property Type="Int32" Name="RENGLON" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -935,6 +954,7 @@
           <EntitySetMapping Name="hdTICKET">
             <EntityTypeMapping TypeName="dbQuantusModel.hdTICKET">
               <MappingFragment StoreEntitySet="hdTICKET">
+                <ScalarProperty Name="FECHACIERRE" ColumnName="FECHACIERRE" />
                 <ScalarProperty Name="IDTICKET" ColumnName="IDTICKET" />
                 <ScalarProperty Name="IDCLIENTE" ColumnName="IDCLIENTE" />
                 <ScalarProperty Name="IDTIPO" ColumnName="IDTIPO" />
@@ -1046,6 +1066,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ticketsBySucTemaList" FunctionName="dbQuantusModel.Store.ticketsBySucTemaList" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbQuantusModel.ticketsBySucTemaList_Result">
+                <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
+                <ScalarProperty Name="NOMSUCURSAL" ColumnName="NOMSUCURSAL" />
+                <ScalarProperty Name="IDTIPO" ColumnName="IDTIPO" />
+                <ScalarProperty Name="NOMTIPO" ColumnName="NOMTIPO" />
+                <ScalarProperty Name="ABIERTO" ColumnName="ABIERTO" />
+                <ScalarProperty Name="ASIGNADO" ColumnName="ASIGNADO" />
+                <ScalarProperty Name="REABIERTO" ColumnName="REABIERTO" />
+                <ScalarProperty Name="CERRADO" ColumnName="CERRADO" />
+                <ScalarProperty Name="RENGLON" ColumnName="RENGLON" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

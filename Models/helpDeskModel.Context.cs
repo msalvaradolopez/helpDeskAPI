@@ -12,6 +12,8 @@ namespace helpDeskAPI.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class dbQuantusEntities : DbContext
     {
@@ -37,5 +39,14 @@ namespace helpDeskAPI.Models
         public virtual DbSet<hdUSUARIO> hdUSUARIO { get; set; }
         public virtual DbSet<hdPARAM> hdPARAM { get; set; }
         public virtual DbSet<hdSLA> hdSLA { get; set; }
+    
+        public virtual ObjectResult<ticketsBySucTemaList_Result> ticketsBySucTemaList(Nullable<int> tema)
+        {
+            var temaParameter = tema.HasValue ?
+                new ObjectParameter("Tema", tema) :
+                new ObjectParameter("Tema", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ticketsBySucTemaList_Result>("ticketsBySucTemaList", temaParameter);
+        }
     }
 }
