@@ -354,8 +354,50 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="getTicketsByDashBoard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idCliente" Type="int" Mode="In" />
+          <Parameter Name="listaSucursales" Type="varchar" Mode="In" />
+          <Parameter Name="listaTemas" Type="varchar" Mode="In" />
+          <Parameter Name="listaEstatus" Type="varchar" Mode="In" />
+          <Parameter Name="rangoFechaSiNo" Type="int" Mode="In" />
+          <Parameter Name="fechaIni" Type="date" Mode="In" />
+          <Parameter Name="fechaFin" Type="date" Mode="In" />
+        </Function>
+        <Function Name="porcBySuc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idCliente" Type="int" Mode="In" />
+          <Parameter Name="listaSucursales" Type="varchar" Mode="In" />
+          <Parameter Name="listaTemas" Type="varchar" Mode="In" />
+          <Parameter Name="listaEstatus" Type="varchar" Mode="In" />
+          <Parameter Name="rangoFechaSiNo" Type="int" Mode="In" />
+          <Parameter Name="fechaIni" Type="date" Mode="In" />
+          <Parameter Name="fechaFin" Type="date" Mode="In" />
+        </Function>
+        <Function Name="porcByTema" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idCliente" Type="int" Mode="In" />
+          <Parameter Name="listaSucursales" Type="varchar" Mode="In" />
+          <Parameter Name="listaTemas" Type="varchar" Mode="In" />
+          <Parameter Name="listaEstatus" Type="varchar" Mode="In" />
+          <Parameter Name="rangoFechaSiNo" Type="int" Mode="In" />
+          <Parameter Name="fechaIni" Type="date" Mode="In" />
+          <Parameter Name="fechaFin" Type="date" Mode="In" />
+        </Function>
         <Function Name="ticketsBySucTemaList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Tema" Type="int" Mode="In" />
+          <Parameter Name="idCliente" Type="int" Mode="In" />
+          <Parameter Name="listaSucursales" Type="varchar" Mode="In" />
+          <Parameter Name="listaTemas" Type="varchar" Mode="In" />
+          <Parameter Name="listaEstatus" Type="varchar" Mode="In" />
+          <Parameter Name="rangoFechaSiNo" Type="int" Mode="In" />
+          <Parameter Name="fechaIni" Type="date" Mode="In" />
+          <Parameter Name="fechaFin" Type="date" Mode="In" />
+        </Function>
+        <Function Name="ticketsByTemaSucList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idCliente" Type="int" Mode="In" />
+          <Parameter Name="listaSucursales" Type="varchar" Mode="In" />
+          <Parameter Name="listaTemas" Type="varchar" Mode="In" />
+          <Parameter Name="listaEstatus" Type="varchar" Mode="In" />
+          <Parameter Name="rangoFechaSiNo" Type="int" Mode="In" />
+          <Parameter Name="fechaIni" Type="date" Mode="In" />
+          <Parameter Name="fechaFin" Type="date" Mode="In" />
         </Function>
         <EntityContainer Name="dbQuantusModelStoreContainer">
           <EntitySet Name="hdCLIENTE" EntityType="Self.hdCLIENTE" Schema="dbo" store:Type="Tables" />
@@ -836,7 +878,49 @@
             <End Role="hdTICKET" EntitySet="hdTICKET" />
           </AssociationSet>
           <FunctionImport Name="ticketsBySucTemaList" ReturnType="Collection(dbQuantusModel.ticketsBySucTemaList_Result)">
-          <Parameter Name="Tema" Mode="In" Type="Int32" />
+            <Parameter Name="idCliente" Mode="In" Type="Int32" />
+            <Parameter Name="listaSucursales" Mode="In" Type="String" />
+            <Parameter Name="listaTemas" Mode="In" Type="String" />
+            <Parameter Name="listaEstatus" Mode="In" Type="String" />
+            <Parameter Name="rangoFechaSiNo" Mode="In" Type="Int32" />
+            <Parameter Name="fechaIni" Mode="In" Type="DateTime" />
+            <Parameter Name="fechaFin" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="ticketsByTemaSucList" ReturnType="Collection(dbQuantusModel.ticketsByTemaSucList_Result)">
+            <Parameter Name="idCliente" Mode="In" Type="Int32" />
+            <Parameter Name="listaSucursales" Mode="In" Type="String" />
+            <Parameter Name="listaTemas" Mode="In" Type="String" />
+            <Parameter Name="listaEstatus" Mode="In" Type="String" />
+            <Parameter Name="rangoFechaSiNo" Mode="In" Type="Int32" />
+            <Parameter Name="fechaIni" Mode="In" Type="DateTime" />
+            <Parameter Name="fechaFin" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="porcBySuc" ReturnType="Collection(dbQuantusModel.porcBySuc_Result)">
+            <Parameter Name="idCliente" Mode="In" Type="Int32" />
+            <Parameter Name="listaSucursales" Mode="In" Type="String" />
+            <Parameter Name="listaTemas" Mode="In" Type="String" />
+            <Parameter Name="listaEstatus" Mode="In" Type="String" />
+            <Parameter Name="rangoFechaSiNo" Mode="In" Type="Int32" />
+            <Parameter Name="fechaIni" Mode="In" Type="DateTime" />
+            <Parameter Name="fechaFin" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="porcByTema" ReturnType="Collection(dbQuantusModel.porcByTema_Result)">
+            <Parameter Name="idCliente" Mode="In" Type="Int32" />
+            <Parameter Name="listaSucursales" Mode="In" Type="String" />
+            <Parameter Name="listaTemas" Mode="In" Type="String" />
+            <Parameter Name="listaEstatus" Mode="In" Type="String" />
+            <Parameter Name="rangoFechaSiNo" Mode="In" Type="Int32" />
+            <Parameter Name="fechaIni" Mode="In" Type="DateTime" />
+            <Parameter Name="fechaFin" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="getTicketsByDashBoard" ReturnType="Collection(dbQuantusModel.getTicketsByDashBoard_Result)">
+            <Parameter Name="idCliente" Mode="In" Type="Int32" />
+            <Parameter Name="listaSucursales" Mode="In" Type="String" />
+            <Parameter Name="listaTemas" Mode="In" Type="String" />
+            <Parameter Name="listaEstatus" Mode="In" Type="String" />
+            <Parameter Name="rangoFechaSiNo" Mode="In" Type="Int32" />
+            <Parameter Name="fechaIni" Mode="In" Type="DateTime" />
+            <Parameter Name="fechaFin" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="hdPARAM">
@@ -910,7 +994,46 @@
           <Property Type="Int32" Name="ASIGNADO" Nullable="true" />
           <Property Type="Int32" Name="REABIERTO" Nullable="true" />
           <Property Type="Int32" Name="CERRADO" Nullable="true" />
-          <Property Type="Int32" Name="RENGLON" Nullable="false" />
+          <Property Type="Int32" Name="TOTAL" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ticketsByTemaSucList_Result">
+          <Property Type="Int32" Name="IDTIPO" Nullable="true" />
+          <Property Type="String" Name="NOMTIPO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="IDSUCURSAL" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NOMSUCURSAL" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="ABIERTO" Nullable="true" />
+          <Property Type="Int32" Name="ASIGNADO" Nullable="true" />
+          <Property Type="Int32" Name="REABIERTO" Nullable="true" />
+          <Property Type="Int32" Name="CERRADO" Nullable="true" />
+          <Property Type="Int32" Name="TOTAL" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="porcBySuc_Result">
+          <Property Type="String" Name="IDSUCURSAL" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NOMSUCURSAL" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="IDTIPO" Nullable="true" />
+          <Property Type="String" Name="NOMTIPO" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="CANTIDAD" Nullable="true" />
+          <Property Type="Decimal" Name="PORC" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="porcByTema_Result">
+          <Property Type="String" Name="IDSUCURSAL" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NOMSUCURSAL" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="IDTIPO" Nullable="true" />
+          <Property Type="String" Name="NOMTIPO" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="CANTIDAD" Nullable="true" />
+          <Property Type="Decimal" Name="PORC" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="getTicketsByDashBoard_Result">
+          <Property Type="String" Name="IDTICKET" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ASUNTO" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="NOMUSUARIO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ESTATUS" Nullable="true" MaxLength="1" />
+          <Property Type="DateTime" Name="FECHA" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="IDPRIORIDAD" Nullable="true" />
+          <Property Type="String" Name="NOMASIGNADOA" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="FECHACIERRE" Nullable="true" Precision="23" />
+          <Property Type="String" Name="IDSUCURSAL" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="NOMSUCURSAL" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1077,7 +1200,62 @@
                 <ScalarProperty Name="ASIGNADO" ColumnName="ASIGNADO" />
                 <ScalarProperty Name="REABIERTO" ColumnName="REABIERTO" />
                 <ScalarProperty Name="CERRADO" ColumnName="CERRADO" />
-                <ScalarProperty Name="RENGLON" ColumnName="RENGLON" />
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ticketsByTemaSucList" FunctionName="dbQuantusModel.Store.ticketsByTemaSucList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbQuantusModel.ticketsByTemaSucList_Result">
+                <ScalarProperty Name="IDTIPO" ColumnName="IDTIPO" />
+                <ScalarProperty Name="NOMTIPO" ColumnName="NOMTIPO" />
+                <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
+                <ScalarProperty Name="NOMSUCURSAL" ColumnName="NOMSUCURSAL" />
+                <ScalarProperty Name="ABIERTO" ColumnName="ABIERTO" />
+                <ScalarProperty Name="ASIGNADO" ColumnName="ASIGNADO" />
+                <ScalarProperty Name="REABIERTO" ColumnName="REABIERTO" />
+                <ScalarProperty Name="CERRADO" ColumnName="CERRADO" />
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="porcBySuc" FunctionName="dbQuantusModel.Store.porcBySuc">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbQuantusModel.porcBySuc_Result">
+                <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
+                <ScalarProperty Name="NOMSUCURSAL" ColumnName="NOMSUCURSAL" />
+                <ScalarProperty Name="IDTIPO" ColumnName="IDTIPO" />
+                <ScalarProperty Name="NOMTIPO" ColumnName="NOMTIPO" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+                <ScalarProperty Name="PORC" ColumnName="PORC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="porcByTema" FunctionName="dbQuantusModel.Store.porcByTema">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbQuantusModel.porcByTema_Result">
+                <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
+                <ScalarProperty Name="NOMSUCURSAL" ColumnName="NOMSUCURSAL" />
+                <ScalarProperty Name="IDTIPO" ColumnName="IDTIPO" />
+                <ScalarProperty Name="NOMTIPO" ColumnName="NOMTIPO" />
+                <ScalarProperty Name="CANTIDAD" ColumnName="CANTIDAD" />
+                <ScalarProperty Name="PORC" ColumnName="PORC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getTicketsByDashBoard" FunctionName="dbQuantusModel.Store.getTicketsByDashBoard">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbQuantusModel.getTicketsByDashBoard_Result">
+                <ScalarProperty Name="IDTICKET" ColumnName="IDTICKET" />
+                <ScalarProperty Name="ASUNTO" ColumnName="ASUNTO" />
+                <ScalarProperty Name="NOMUSUARIO" ColumnName="NOMUSUARIO" />
+                <ScalarProperty Name="ESTATUS" ColumnName="ESTATUS" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="IDPRIORIDAD" ColumnName="IDPRIORIDAD" />
+                <ScalarProperty Name="NOMASIGNADOA" ColumnName="NOMASIGNADOA" />
+                <ScalarProperty Name="FECHACIERRE" ColumnName="FECHACIERRE" />
+                <ScalarProperty Name="IDSUCURSAL" ColumnName="IDSUCURSAL" />
+                <ScalarProperty Name="NOMSUCURSAL" ColumnName="NOMSUCURSAL" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

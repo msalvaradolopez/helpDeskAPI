@@ -1788,7 +1788,7 @@ namespace helpDeskAPI.Controllers
             }
         }
 
-        // POST api/values -- obtener informacion para validacion de login 
+        // POST api/values -- obtener info para estatus de tickets por sucrusal y tema
         [AcceptVerbs("POST")]
         [HttpPost()]
         [Route("ticketsBySucTemaList")]
@@ -1800,8 +1800,147 @@ namespace helpDeskAPI.Controllers
                 {
 
                     int _valor = Int32.Parse(oPARAM.valor);
+                    int _idcliente = oPARAM.idcliente;
+                    string _sucursales = string.Join(",", oPARAM.sucursales);
+                    string _temas = string.Join(",", oPARAM.temas);
+                    string _estatus = "O,A,R";
+                    int _rangoFechasSiNo = 0;
+                    DateTime _fechaIni = DateTime.Now;
+                    DateTime _fechaFin = DateTime.Now;
 
-                    var _resp = db.ticketsBySucTemaList(_valor).ToList();
+                    var _resp = db.ticketsBySucTemaList(_idcliente, _sucursales, _temas, _estatus, _rangoFechasSiNo, _fechaIni, _fechaFin).ToList();
+
+
+                    return _resp;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- obtener info para estatus de tickets por tema y sucrusal.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("ticketsByTemaSucList")]
+        public IEnumerable<object> ticketsByTemaSucList([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+
+                    int _valor = Int32.Parse(oPARAM.valor);
+                    int _idcliente = oPARAM.idcliente;
+                    string _sucursales = string.Join(",", oPARAM.sucursales);
+                    string _temas = string.Join(",", oPARAM.temas);
+                    string _estatus = "O,A,R";
+                    int _rangoFechasSiNo = 0;
+                    DateTime _fechaIni = DateTime.Now;
+                    DateTime _fechaFin = DateTime.Now;
+
+                    var _resp = db.ticketsByTemaSucList(_idcliente, _sucursales, _temas, _estatus, _rangoFechasSiNo, _fechaIni, _fechaFin).ToList();
+
+
+                    return _resp;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- obtener info para estatus de tickets por tema y sucrusal.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("porcBySuc")]
+        public IEnumerable<object> porcBySuc([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+
+                    int _valor = Int32.Parse(oPARAM.valor);
+                    int _idcliente = oPARAM.idcliente;
+                    string _sucursales = string.Join(",", oPARAM.sucursales);
+                    string _temas = string.Join(",", oPARAM.temas);
+                    string _estatus = "O,A,R,C";
+                    int _rangoFechasSiNo = 0;
+                    DateTime _fechaIni = DateTime.Now;
+                    DateTime _fechaFin = DateTime.Now;
+
+                    var _resp = db.porcBySuc(_idcliente, _sucursales, _temas, _estatus, _rangoFechasSiNo, _fechaIni, _fechaFin).ToList();
+
+
+                    return _resp;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- obtener info PORC temas.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("porcByTema")]
+        public IEnumerable<object> porcByTema([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+
+                    int _valor = Int32.Parse(oPARAM.valor);
+                    int _idcliente = oPARAM.idcliente;
+                    string _sucursales = string.Join(",", oPARAM.sucursales);
+                    string _temas = string.Join(",", oPARAM.temas);
+                    string _estatus = "O,A,R,C";
+                    int _rangoFechasSiNo = 0;
+                    DateTime _fechaIni = DateTime.Now;
+                    DateTime _fechaFin = DateTime.Now;
+
+                    var _resp = db.porcByTema(_idcliente, _sucursales, _temas, _estatus, _rangoFechasSiNo, _fechaIni, _fechaFin).ToList();
+
+
+                    return _resp;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        // POST api/values -- obtener info para dashboard v2.0.
+        [AcceptVerbs("POST")]
+        [HttpPost()]
+        [Route("getTicketsByDashBoard")]
+        public IEnumerable<object> getTicketsByDashBoard([FromBody] PARAM oPARAM)
+        {
+            using (dbQuantusEntities db = new dbQuantusEntities())
+            {
+                try
+                {
+
+                    int _valor = Int32.Parse(oPARAM.valor);
+                    int _idcliente = oPARAM.idcliente;
+                    string _sucursales = string.Join(",", oPARAM.sucursales);
+                    string _temas = string.Join(",", oPARAM.temas);
+                    string _estatus = "O,A,R,C";
+                    int _rangoFechasSiNo = 0;
+                    DateTime _fechaIni = DateTime.Now;
+                    DateTime _fechaFin = DateTime.Now;
+
+                    var _resp = db.getTicketsByDashBoard(_idcliente, _sucursales, _temas, _estatus, _rangoFechasSiNo, _fechaIni, _fechaFin).ToList();
 
 
                     return _resp;

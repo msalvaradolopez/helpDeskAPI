@@ -21,6 +21,6 @@ namespace helpDeskAPI.Models
         public Nullable<int> ASIGNADO { get; set; }
         public Nullable<int> REABIERTO { get; set; }
         public Nullable<int> CERRADO { get; set; }
-        public int RENGLON { get; set; }
+        public Nullable<int> TOTAL { get; set; }
     }
 }

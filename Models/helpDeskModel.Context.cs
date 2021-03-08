@@ -40,13 +40,169 @@ namespace helpDeskAPI.Models
         public virtual DbSet<hdPARAM> hdPARAM { get; set; }
         public virtual DbSet<hdSLA> hdSLA { get; set; }
     
-        public virtual ObjectResult<ticketsBySucTemaList_Result> ticketsBySucTemaList(Nullable<int> tema)
+        public virtual ObjectResult<ticketsBySucTemaList_Result> ticketsBySucTemaList(Nullable<int> idCliente, string listaSucursales, string listaTemas, string listaEstatus, Nullable<int> rangoFechaSiNo, Nullable<System.DateTime> fechaIni, Nullable<System.DateTime> fechaFin)
         {
-            var temaParameter = tema.HasValue ?
-                new ObjectParameter("Tema", tema) :
-                new ObjectParameter("Tema", typeof(int));
+            var idClienteParameter = idCliente.HasValue ?
+                new ObjectParameter("idCliente", idCliente) :
+                new ObjectParameter("idCliente", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ticketsBySucTemaList_Result>("ticketsBySucTemaList", temaParameter);
+            var listaSucursalesParameter = listaSucursales != null ?
+                new ObjectParameter("listaSucursales", listaSucursales) :
+                new ObjectParameter("listaSucursales", typeof(string));
+    
+            var listaTemasParameter = listaTemas != null ?
+                new ObjectParameter("listaTemas", listaTemas) :
+                new ObjectParameter("listaTemas", typeof(string));
+    
+            var listaEstatusParameter = listaEstatus != null ?
+                new ObjectParameter("listaEstatus", listaEstatus) :
+                new ObjectParameter("listaEstatus", typeof(string));
+    
+            var rangoFechaSiNoParameter = rangoFechaSiNo.HasValue ?
+                new ObjectParameter("rangoFechaSiNo", rangoFechaSiNo) :
+                new ObjectParameter("rangoFechaSiNo", typeof(int));
+    
+            var fechaIniParameter = fechaIni.HasValue ?
+                new ObjectParameter("fechaIni", fechaIni) :
+                new ObjectParameter("fechaIni", typeof(System.DateTime));
+    
+            var fechaFinParameter = fechaFin.HasValue ?
+                new ObjectParameter("fechaFin", fechaFin) :
+                new ObjectParameter("fechaFin", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ticketsBySucTemaList_Result>("ticketsBySucTemaList", idClienteParameter, listaSucursalesParameter, listaTemasParameter, listaEstatusParameter, rangoFechaSiNoParameter, fechaIniParameter, fechaFinParameter);
+        }
+    
+        public virtual ObjectResult<ticketsByTemaSucList_Result> ticketsByTemaSucList(Nullable<int> idCliente, string listaSucursales, string listaTemas, string listaEstatus, Nullable<int> rangoFechaSiNo, Nullable<System.DateTime> fechaIni, Nullable<System.DateTime> fechaFin)
+        {
+            var idClienteParameter = idCliente.HasValue ?
+                new ObjectParameter("idCliente", idCliente) :
+                new ObjectParameter("idCliente", typeof(int));
+    
+            var listaSucursalesParameter = listaSucursales != null ?
+                new ObjectParameter("listaSucursales", listaSucursales) :
+                new ObjectParameter("listaSucursales", typeof(string));
+    
+            var listaTemasParameter = listaTemas != null ?
+                new ObjectParameter("listaTemas", listaTemas) :
+                new ObjectParameter("listaTemas", typeof(string));
+    
+            var listaEstatusParameter = listaEstatus != null ?
+                new ObjectParameter("listaEstatus", listaEstatus) :
+                new ObjectParameter("listaEstatus", typeof(string));
+    
+            var rangoFechaSiNoParameter = rangoFechaSiNo.HasValue ?
+                new ObjectParameter("rangoFechaSiNo", rangoFechaSiNo) :
+                new ObjectParameter("rangoFechaSiNo", typeof(int));
+    
+            var fechaIniParameter = fechaIni.HasValue ?
+                new ObjectParameter("fechaIni", fechaIni) :
+                new ObjectParameter("fechaIni", typeof(System.DateTime));
+    
+            var fechaFinParameter = fechaFin.HasValue ?
+                new ObjectParameter("fechaFin", fechaFin) :
+                new ObjectParameter("fechaFin", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ticketsByTemaSucList_Result>("ticketsByTemaSucList", idClienteParameter, listaSucursalesParameter, listaTemasParameter, listaEstatusParameter, rangoFechaSiNoParameter, fechaIniParameter, fechaFinParameter);
+        }
+    
+        public virtual ObjectResult<porcBySuc_Result> porcBySuc(Nullable<int> idCliente, string listaSucursales, string listaTemas, string listaEstatus, Nullable<int> rangoFechaSiNo, Nullable<System.DateTime> fechaIni, Nullable<System.DateTime> fechaFin)
+        {
+            var idClienteParameter = idCliente.HasValue ?
+                new ObjectParameter("idCliente", idCliente) :
+                new ObjectParameter("idCliente", typeof(int));
+    
+            var listaSucursalesParameter = listaSucursales != null ?
+                new ObjectParameter("listaSucursales", listaSucursales) :
+                new ObjectParameter("listaSucursales", typeof(string));
+    
+            var listaTemasParameter = listaTemas != null ?
+                new ObjectParameter("listaTemas", listaTemas) :
+                new ObjectParameter("listaTemas", typeof(string));
+    
+            var listaEstatusParameter = listaEstatus != null ?
+                new ObjectParameter("listaEstatus", listaEstatus) :
+                new ObjectParameter("listaEstatus", typeof(string));
+    
+            var rangoFechaSiNoParameter = rangoFechaSiNo.HasValue ?
+                new ObjectParameter("rangoFechaSiNo", rangoFechaSiNo) :
+                new ObjectParameter("rangoFechaSiNo", typeof(int));
+    
+            var fechaIniParameter = fechaIni.HasValue ?
+                new ObjectParameter("fechaIni", fechaIni) :
+                new ObjectParameter("fechaIni", typeof(System.DateTime));
+    
+            var fechaFinParameter = fechaFin.HasValue ?
+                new ObjectParameter("fechaFin", fechaFin) :
+                new ObjectParameter("fechaFin", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<porcBySuc_Result>("porcBySuc", idClienteParameter, listaSucursalesParameter, listaTemasParameter, listaEstatusParameter, rangoFechaSiNoParameter, fechaIniParameter, fechaFinParameter);
+        }
+    
+        public virtual ObjectResult<porcByTema_Result> porcByTema(Nullable<int> idCliente, string listaSucursales, string listaTemas, string listaEstatus, Nullable<int> rangoFechaSiNo, Nullable<System.DateTime> fechaIni, Nullable<System.DateTime> fechaFin)
+        {
+            var idClienteParameter = idCliente.HasValue ?
+                new ObjectParameter("idCliente", idCliente) :
+                new ObjectParameter("idCliente", typeof(int));
+    
+            var listaSucursalesParameter = listaSucursales != null ?
+                new ObjectParameter("listaSucursales", listaSucursales) :
+                new ObjectParameter("listaSucursales", typeof(string));
+    
+            var listaTemasParameter = listaTemas != null ?
+                new ObjectParameter("listaTemas", listaTemas) :
+                new ObjectParameter("listaTemas", typeof(string));
+    
+            var listaEstatusParameter = listaEstatus != null ?
+                new ObjectParameter("listaEstatus", listaEstatus) :
+                new ObjectParameter("listaEstatus", typeof(string));
+    
+            var rangoFechaSiNoParameter = rangoFechaSiNo.HasValue ?
+                new ObjectParameter("rangoFechaSiNo", rangoFechaSiNo) :
+                new ObjectParameter("rangoFechaSiNo", typeof(int));
+    
+            var fechaIniParameter = fechaIni.HasValue ?
+                new ObjectParameter("fechaIni", fechaIni) :
+                new ObjectParameter("fechaIni", typeof(System.DateTime));
+    
+            var fechaFinParameter = fechaFin.HasValue ?
+                new ObjectParameter("fechaFin", fechaFin) :
+                new ObjectParameter("fechaFin", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<porcByTema_Result>("porcByTema", idClienteParameter, listaSucursalesParameter, listaTemasParameter, listaEstatusParameter, rangoFechaSiNoParameter, fechaIniParameter, fechaFinParameter);
+        }
+    
+        public virtual ObjectResult<getTicketsByDashBoard_Result> getTicketsByDashBoard(Nullable<int> idCliente, string listaSucursales, string listaTemas, string listaEstatus, Nullable<int> rangoFechaSiNo, Nullable<System.DateTime> fechaIni, Nullable<System.DateTime> fechaFin)
+        {
+            var idClienteParameter = idCliente.HasValue ?
+                new ObjectParameter("idCliente", idCliente) :
+                new ObjectParameter("idCliente", typeof(int));
+    
+            var listaSucursalesParameter = listaSucursales != null ?
+                new ObjectParameter("listaSucursales", listaSucursales) :
+                new ObjectParameter("listaSucursales", typeof(string));
+    
+            var listaTemasParameter = listaTemas != null ?
+                new ObjectParameter("listaTemas", listaTemas) :
+                new ObjectParameter("listaTemas", typeof(string));
+    
+            var listaEstatusParameter = listaEstatus != null ?
+                new ObjectParameter("listaEstatus", listaEstatus) :
+                new ObjectParameter("listaEstatus", typeof(string));
+    
+            var rangoFechaSiNoParameter = rangoFechaSiNo.HasValue ?
+                new ObjectParameter("rangoFechaSiNo", rangoFechaSiNo) :
+                new ObjectParameter("rangoFechaSiNo", typeof(int));
+    
+            var fechaIniParameter = fechaIni.HasValue ?
+                new ObjectParameter("fechaIni", fechaIni) :
+                new ObjectParameter("fechaIni", typeof(System.DateTime));
+    
+            var fechaFinParameter = fechaFin.HasValue ?
+                new ObjectParameter("fechaFin", fechaFin) :
+                new ObjectParameter("fechaFin", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getTicketsByDashBoard_Result>("getTicketsByDashBoard", idClienteParameter, listaSucursalesParameter, listaTemasParameter, listaEstatusParameter, rangoFechaSiNoParameter, fechaIniParameter, fechaFinParameter);
         }
     }
 }
